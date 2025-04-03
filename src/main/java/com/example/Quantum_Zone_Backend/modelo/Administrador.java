@@ -2,24 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.example.demo.modelo;
-
+package com.example.Quantum_Zone_Backend.modelo;
+import java.util.UUID;
 /**
  *
- * @author shadow111285
  */
 public class Administrador {
+	private String id;
     private String nombre;
     private String contraseña;
     private int edad;
     private String cedula;
 
     public Administrador(String nombre, String contraseña, int edad, String cedula) {
+    	this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.edad = edad;
         this.cedula = cedula;
     }
+    public Administrador() {
+    	this.id = UUID.randomUUID().toString();;
+		
+	}
 
     public String getNombre() {
         return nombre;
@@ -52,5 +57,21 @@ public class Administrador {
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
+    
+    public String getId() {
+		return id;
+	}
+    
+   
+	
+	@Override
+	public String toString() {
+		return "Administrador{" +
+				"nombre='" + nombre + '\'' +
+				", contraseña='" + contraseña + '\'' +
+				", edad=" + edad +
+				", cedula='" + cedula + '\'' +
+				'}';
+	}
     
 }

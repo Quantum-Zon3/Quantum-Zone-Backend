@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package modelo;
-
+package com.example.Quantum_Zone_Backend.modelo;
+import java.util.UUID;
 /**
  *
  * @author shadow111285
  */
 public class Cliente {
-
+	private String id;
     private String nombre;
     private int edad;
     private String direccion;
@@ -20,7 +20,8 @@ public class Cliente {
     private String email;
 
     public Cliente(String nombre, int edad, String direccion, String imagen, String telefono, String fechaRegistro, String email) {
-        this.nombre = nombre;
+    	this.id = UUID.randomUUID().toString();
+    	this.nombre = nombre;
         this.edad = edad;
         this.direccion = direccion;
         this.imagen = imagen;
@@ -28,6 +29,9 @@ public class Cliente {
         this.fechaRegistro = fechaRegistro;
         this.email = email;
     }
+    public Cliente() {
+		this.id = UUID.randomUUID().toString();
+	}
 
     public String getNombre() {
         return nombre;
@@ -91,6 +95,9 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getId() {
+    	return id;
     }
     
 
