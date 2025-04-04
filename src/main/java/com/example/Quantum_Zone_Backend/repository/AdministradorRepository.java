@@ -40,11 +40,11 @@ public class AdministradorRepository {
 		
 	}
 	//Buscar administrador por filtros
-	public List<Administrador> buscarPorFiltros(String nombre, String cedula, String edad) {
+	public List<Administrador> findByFilters(String nombre, String cedula, int edad) {
 		return baseDeDatos.values().stream()
 				.filter(administrador -> nombre == null || administrador.getNombre().equalsIgnoreCase(nombre))
 				.filter(administrador -> cedula == null || administrador.getCedula().equalsIgnoreCase(cedula))
-				.filter(administrador -> edad == null || administrador.getEdad() == 0)
+				.filter(administrador -> administrador.getEdad() == 0)
 				.filter(administrador -> administrador.getContraseña() == null || administrador.getContraseña().equalsIgnoreCase(administrador.getContraseña()))
 				.collect(Collectors.toList());
 		

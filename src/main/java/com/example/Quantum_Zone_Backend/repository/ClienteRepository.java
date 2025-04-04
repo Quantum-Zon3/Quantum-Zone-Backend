@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 import com.example.Quantum_Zone_Backend.modelo.Cliente;
-
+import java.time.LocalDate;
 @Repository
 public class ClienteRepository {
 	private final Map<String, Cliente> baseDeDatos = new HashMap<>();
@@ -38,7 +38,7 @@ public class ClienteRepository {
 		return null;
 	}
 	//Buscar cliente por filtros
-	public List<Cliente> buscarPorFiltros(String nombre, String edad, String direccion, String imagen, String cedula, String telefono, String fechaRegistro, String email) {
+	public List<Cliente> findByFilters(String nombre, String edad, String direccion, String imagen, String cedula, String telefono, LocalDate fechaRegistro, String email) {
 		return baseDeDatos.values().stream()
 				.filter(cliente -> nombre == null || cliente.getNombre().equalsIgnoreCase(nombre))
 				.filter(cliente -> cliente.getEdad() == 0)
@@ -46,7 +46,7 @@ public class ClienteRepository {
 				.filter(cliente -> imagen == null || cliente.getImagen().equalsIgnoreCase(imagen))
 				.filter(cliente -> cedula == null || cliente.getCedula().equalsIgnoreCase(cedula))
 				.filter(cliente -> telefono == null || cliente.getTelefono().equalsIgnoreCase(telefono))
-				.filter(cliente -> fechaRegistro == null || cliente.getFechaRegistro().equalsIgnoreCase(fechaRegistro))
+				.filter(cliente -> fechaRegistro == null || cliente.getFechaRegistro().equals(fechaRegistro))
 				.filter(cliente -> email == null || cliente.getEmail().equalsIgnoreCase(email))
 				.collect(Collectors.toList());
 		
