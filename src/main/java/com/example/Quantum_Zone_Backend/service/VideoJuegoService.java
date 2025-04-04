@@ -1,4 +1,5 @@
 package com.example.Quantum_Zone_Backend.service;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class VideoJuegoService {
 	}
 		private void initSampleData() {
 		// Crear videojuegos
-		VideoJuego videojuego1 = new VideoJuego("The Last of Us Part II", "Acción/Aventura", "Naughty Dog", "2020-06-19", "PS4");
-		VideoJuego videojuego2 = new VideoJuego("God of War", "Acción/Aventura", "Santa Monica Studio", "2018-04-20", "PS4");
-		VideoJuego videojuego3 = new VideoJuego("Halo Infinite", "Disparos en primera persona", "343 Industries", "2021-12-08", "Xbox Series X|S");
+		VideoJuego videojuego1 = new VideoJuego("The Last of Us Part II", "Acción/Aventura", "Naughty Dog", LocalDate.now(), "PS4");
+		VideoJuego videojuego2 = new VideoJuego("God of War", "Acción/Aventura", "Santa Monica Studio", LocalDate.now(), "PS4");
+		VideoJuego videojuego3 = new VideoJuego("Halo Infinite", "Disparos en primera persona", "343 Industries", LocalDate.now(), "Xbox Series X|S");
 		
 		// Guardar videojuegos en la base de datos
 		save(videojuego1);
