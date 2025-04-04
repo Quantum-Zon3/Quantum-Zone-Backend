@@ -33,7 +33,7 @@ public class VideoJuegoService {
 		}
 		// encontrar un videojuego por id
 		public VideoJuego findById(String id) {
-			return videojuegoRepository.findById(id).orElse(null);
+			return videojuegoRepository.findById(id);
 		}
 		// listar todos los videojuegos
 		public List<VideoJuego> findAll() {
