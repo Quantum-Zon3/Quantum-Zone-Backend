@@ -6,11 +6,11 @@ import java.util.UUID;
 public class Inventario {
 	private String id;
 	private Map<String, Consola> consolas;
-	private Map<String, Videojuego> juegos;
+	private Map<String, VideoJuego> juegos;
 	private Map<String, Objeto> objetos;
 	private Map<String, Puesto> puestos;
 	
-	public Inventario(Map<String, Consola> consolas, Map<String, Videojuego> juegos, Map<String, Objeto> objetos,
+	public Inventario(Map<String, Consola> consolas, Map<String, VideoJuego> juegos, Map<String, Objeto> objetos,
 			Map<String, Puesto> puestos) {
 		this.id = UUID.randomUUID().toString();
 		this.consolas = consolas;
@@ -31,11 +31,11 @@ public class Inventario {
 		this.consolas = consolas;
 	}
 
-	public Map<String, Videojuego> getJuegos() {
+	public Map<String, VideoJuego> getJuegos() {
 		return juegos;
 	}
 
-	public void setJuegos(Map<String, Videojuego> juegos) {
+	public void setJuegos(Map<String, VideoJuego> juegos) {
 		this.juegos = juegos;
 	}
 

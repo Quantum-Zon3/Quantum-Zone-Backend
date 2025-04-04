@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.Quantum_Zone_Backend.modelo;
+import java.time.LocalDate;
 import java.util.UUID;
 /**
  *
@@ -12,9 +13,9 @@ public class Consola {
 	private String id;
     private String marca;
     private String consola;
-    private String fechaDePublicacion;
+    private LocalDate fechaDePublicacion;
 
-    public Consola(String marca, String consola, String fechaDePublicacion) {
+    public Consola(String marca, String consola, LocalDate fechaDePublicacion) {
     	this.id = UUID.randomUUID().toString();
         this.marca = marca;
         this.consola = consola;
@@ -40,11 +41,11 @@ public class Consola {
         this.consola = consola;
     }
 
-    public String getFechaDePublicacion() {
+    public LocalDate getFechaDePublicacion() {
         return fechaDePublicacion;
     }
 
-    public void setFechaDePublicacion(String fechaDePublicacion) {
+    public void setFechaDePublicacion(LocalDate fechaDePublicacion) {
         this.fechaDePublicacion = fechaDePublicacion;
     }
     public String getId() {

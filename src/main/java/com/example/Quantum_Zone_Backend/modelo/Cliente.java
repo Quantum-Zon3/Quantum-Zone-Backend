@@ -4,6 +4,7 @@
  */
 package com.example.Quantum_Zone_Backend.modelo;
 import java.util.UUID;
+import java.time.LocalDate;
 /**
  *
  * @author shadow111285
@@ -16,10 +17,10 @@ public class Cliente {
     private String imagen;
     private String cedula;
     private String telefono;
-    private String fechaRegistro;
+    private LocalDate fechaRegistro;
     private String email;
 
-    public Cliente(String nombre, int edad, String direccion, String imagen, String telefono, String fechaRegistro, String email) {
+    public Cliente(String nombre, int edad, String direccion, String imagen, String telefono, LocalDate fechaRegistro, String email) {
     	this.id = UUID.randomUUID().toString();
     	this.nombre = nombre;
         this.edad = edad;
@@ -81,11 +82,11 @@ public class Cliente {
         this.cedula = cedula;
     }
 
-    public String getFechaRegistro() {
+    public LocalDate getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(LocalDate fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
