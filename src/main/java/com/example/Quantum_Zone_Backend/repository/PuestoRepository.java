@@ -38,12 +38,12 @@ public class PuestoRepository {
 		return null;
 	}
 	//Buscar puesto por filtros
-	public List<Puesto> buscarPorFiltros(String numeroDePuesto, String consola, String cantidadDeSillas, String cantidadDeControles) {
+	public List<Puesto> findByFilters(String numeroDePuesto, String consola, int cantidadDeSillas, int cantidadDeControles) {
 		return baseDeDatos.values().stream()
 				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equalsIgnoreCase(numeroDePuesto))
 				.filter(consola1 -> consola == null || consola1.getConsola().equalsIgnoreCase(consola))
-				.filter(consola1 -> cantidadDeSillas == null || consola1.getCantidadDeSillas() == 0)
-				.filter(consola1 -> cantidadDeControles == null || consola1.getCanditadDeControles() == 0)
+				.filter(consola1 -> consola1.getCantidadDeSillas() == 0)
+				.filter(consola1 -> consola1.getCanditadDeControles() == 0)
 				.collect(Collectors.toList());
 		
 	}

@@ -8,16 +8,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 import com.example.Quantum_Zone_Backend.modelo.Consola;
-
+import java.time.LocalDate;
 
 @Repository
 public class ConsolaRepository {
 	 private final Map<String, Consola> baseDeDatos = new HashMap<>();
 	 //Guardar consola
 	 public Consola save(Consola consola) {
-	        baseDeDatos.put(consola.getMarca(), consola);
-	        baseDeDatos.put(consola.getConsola(), consola);
-	        baseDeDatos.put(consola.getFechaDePublicacion(), consola);
+	        baseDeDatos.put(consola.getId(), consola);
 	        
 	        return consola;
 	    }
@@ -42,11 +40,11 @@ public class ConsolaRepository {
 	        return null;
 	    }
 	 //Buscar consola por filtros
-	 public List<Consola> buscarPorFiltros(String marca, String consola, String fechaDePublicacion) {
+	 public List<Consola> findByFilters(String marca, String consola, LocalDate fechaDePublicacion) {
 		 return baseDeDatos.values().stream()
 				 .filter(consola1 -> consola1.getMarca().equalsIgnoreCase(marca))
 				 .filter(consola1 -> consola1.getConsola().equalsIgnoreCase(consola))
-				 .filter(consola1 -> consola1.getFechaDePublicacion().equalsIgnoreCase(fechaDePublicacion))
+				 .filter(consola1 -> consola1.getFechaDePublicacion().equals(fechaDePublicacion))
 				 .collect(Collectors.toList());
 		 
 	 }
