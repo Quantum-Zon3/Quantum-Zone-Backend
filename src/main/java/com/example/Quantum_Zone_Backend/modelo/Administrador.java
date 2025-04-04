@@ -8,10 +8,10 @@ public class Administrador {
 	private String id;
     private String nombre;
     private String contraseña;
-    private String edad;
+    private int edad;
     private String cedula;
 
-    public Administrador(String nombre, String contraseña, String edad, String cedula) {
+    public Administrador(String nombre, String contraseña, int edad, String cedula) {
     	this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
         this.contraseña = contraseña;
@@ -39,11 +39,11 @@ public class Administrador {
         this.contraseña = contraseña;
     }
 
-    public String getEdad() {
+    public int getEdad() {
         return edad;
     }
 
-    public void setEdad(String edad) {
+    public void setEdad(int edad) {
         this.edad = edad;
     }
 

@@ -32,10 +32,8 @@ public class AdministradorRepository {
 	//Actualizar administrador
 	public Administrador update(Administrador administrador) {
 		if (baseDeDatos.containsKey(administrador.getId())) {
-			baseDeDatos.put(administrador.getNombre(), administrador);
-			baseDeDatos.put(administrador.getCedula(), administrador);
-			baseDeDatos.put(administrador.getContraseña(), administrador);
-			baseDeDatos.put(administrador.getEdad(), administrador);
+			baseDeDatos.put(administrador.getId(), administrador);
+
 			return administrador;
 		}
 		return null;
@@ -46,7 +44,7 @@ public class AdministradorRepository {
 		return baseDeDatos.values().stream()
 				.filter(administrador -> nombre == null || administrador.getNombre().equalsIgnoreCase(nombre))
 				.filter(administrador -> cedula == null || administrador.getCedula().equalsIgnoreCase(cedula))
-				.filter(administrador -> edad == null || administrador.getEdad().equalsIgnoreCase(edad))
+				.filter(administrador -> edad == null || administrador.getEdad() == 0)
 				.filter(administrador -> administrador.getContraseña() == null || administrador.getContraseña().equalsIgnoreCase(administrador.getContraseña()))
 				.collect(Collectors.toList());
 		

@@ -36,9 +36,7 @@ public class ConsolaRepository {
 	 //Actualizar consola
 	 public Consola update(Consola consola) {
 	        if (baseDeDatos.containsKey(consola.getId())) {
-	            baseDeDatos.put(consola.getMarca(), consola);
-	            baseDeDatos.put(consola.getConsola(), consola);
-	            baseDeDatos.put(consola.getFechaDePublicacion(), consola);
+	            baseDeDatos.put(consola.getId(), consola);
 	            return consola;
 	        }
 	        return null;

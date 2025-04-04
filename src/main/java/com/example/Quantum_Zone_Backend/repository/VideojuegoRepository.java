@@ -24,11 +24,7 @@ public class VideojuegoRepository {
 	}
 	public Videojuego update(Videojuego videojuego) {
         if (baseDeDatos.containsKey(videojuego.getId())) {
-            baseDeDatos.put(videojuego.getNombre(), videojuego);
-            baseDeDatos.put(videojuego.getFechaDePubliacion(), videojuego);
-            baseDeDatos.put(videojuego.getDescripcion(), videojuego);
-            baseDeDatos.put(videojuego.getPublico(), videojuego);
-            baseDeDatos.put(videojuego.getTipo(), videojuego);
+            baseDeDatos.put(videojuego.getId(), videojuego);
             return videojuego;
         }
         return null;

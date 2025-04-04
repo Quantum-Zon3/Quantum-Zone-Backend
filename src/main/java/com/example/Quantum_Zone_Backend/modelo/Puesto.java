@@ -10,11 +10,11 @@ public class Puesto {
 	private String id;
     private String numeroDePuesto;
     private String consola;
-    private String cantidadDeSillas;
-    private String canditadDeControles;
+    private int cantidadDeSillas;
+    private int canditadDeControles;
     
 
-    public Puesto(String numeroDePuesto, String consola, String cantidadDeSillas, String cantidadDeControles) {
+    public Puesto(String numeroDePuesto, String consola, int cantidadDeSillas, int cantidadDeControles) {
     	this.id = UUID.randomUUID().toString();
         this.numeroDePuesto = numeroDePuesto;
         this.consola = consola;
@@ -38,19 +38,19 @@ public class Puesto {
         this.consola = consola;
     }
 
-    public String getCantidadDeSillas() {
+    public int getCantidadDeSillas() {
         return cantidadDeSillas;
     }
 
-    public void setCantidadDeSillas(String cantidadDeSillas) {
+    public void setCantidadDeSillas(int cantidadDeSillas) {
         this.cantidadDeSillas = cantidadDeSillas;
     }
 
-    public String getCanditadDeControles() {
+    public int getCanditadDeControles() {
         return canditadDeControles;
     }
 
-    public void setCanditadDeControles(String canditadDeControles) {
+    public void setCanditadDeControles(int canditadDeControles) {
         this.canditadDeControles = canditadDeControles;
     }
     public String getId() {

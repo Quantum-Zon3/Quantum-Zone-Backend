@@ -32,12 +32,7 @@ public class ObjetoRepository {
 	//Actualizar objeto
 	public Objeto update(Objeto objeto) {
 		if (baseDeDatos.containsKey(objeto.getId())) {
-			baseDeDatos.put(objeto.getNombre(), objeto);
-			baseDeDatos.put(objeto.getCategoria(), objeto);
-			baseDeDatos.put(objeto.getFecha(), objeto);
-			baseDeDatos.put(objeto.getEstado(), objeto);
-			baseDeDatos.put(objeto.getDescripcion(), objeto);
-			return objeto;
+			baseDeDatos.put(objeto.getId(), objeto);
 		}
 		return null;
 	}

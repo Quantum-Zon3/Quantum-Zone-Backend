@@ -32,9 +32,7 @@ public class PuestoRepository {
 	//Actualizar puesto
 	public Puesto update(Puesto puesto) {
 		if (baseDeDatos.containsKey(puesto.getId())) {
-			baseDeDatos.put(puesto.getNumeroDePuesto(), puesto);
-			baseDeDatos.put(puesto.getConsola(), puesto);
-			baseDeDatos.put(puesto.getCanditadDeControles(), puesto);
+			baseDeDatos.put(puesto.getId(), puesto);
 			return puesto;
 		}
 		return null;
@@ -44,8 +42,8 @@ public class PuestoRepository {
 		return baseDeDatos.values().stream()
 				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equalsIgnoreCase(numeroDePuesto))
 				.filter(consola1 -> consola == null || consola1.getConsola().equalsIgnoreCase(consola))
-				.filter(consola1 -> cantidadDeSillas == null || consola1.getCantidadDeSillas().equalsIgnoreCase(cantidadDeSillas))
-				.filter(consola1 -> cantidadDeControles == null || consola1.getCanditadDeControles().equalsIgnoreCase(cantidadDeControles))
+				.filter(consola1 -> cantidadDeSillas == null || consola1.getCantidadDeSillas() == 0)
+				.filter(consola1 -> cantidadDeControles == null || consola1.getCanditadDeControles() == 0)
 				.collect(Collectors.toList());
 		
 	}
