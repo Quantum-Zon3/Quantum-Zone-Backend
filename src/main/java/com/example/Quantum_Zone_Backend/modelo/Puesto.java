@@ -1,7 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
 package com.example.Quantum_Zone_Backend.modelo;
 import java.util.UUID;
 /**
@@ -12,11 +10,11 @@ public class Puesto {
 	private String id;
     private String numeroDePuesto;
     private String consola;
-    private int cantidadDeSillas;
-    private int canditadDeControles;
+    private String cantidadDeSillas;
+    private String canditadDeControles;
     
 
-    public Puesto(String numeroDePuesto, String consola, int cantidadDeSillas, int cantidadDeControles) {
+    public Puesto(String numeroDePuesto, String consola, String cantidadDeSillas, String cantidadDeControles) {
     	this.id = UUID.randomUUID().toString();
         this.numeroDePuesto = numeroDePuesto;
         this.consola = consola;
@@ -40,19 +38,19 @@ public class Puesto {
         this.consola = consola;
     }
 
-    public int getCantidadDeSillas() {
+    public String getCantidadDeSillas() {
         return cantidadDeSillas;
     }
 
-    public void setCantidadDeSillas(int cantidadDeSillas) {
+    public void setCantidadDeSillas(String cantidadDeSillas) {
         this.cantidadDeSillas = cantidadDeSillas;
     }
 
-    public int getCanditadDeControles() {
+    public String getCanditadDeControles() {
         return canditadDeControles;
     }
 
-    public void setCanditadDeControles(int canditadDeControles) {
+    public void setCanditadDeControles(String canditadDeControles) {
         this.canditadDeControles = canditadDeControles;
     }
     public String getId() {

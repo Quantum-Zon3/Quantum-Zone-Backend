@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Cliente {
 	private String id;
     private String nombre;
-    private int edad;
+    private String edad;
     private String direccion;
     private String imagen;
     private String cedula;
@@ -19,7 +19,7 @@ public class Cliente {
     private String fechaRegistro;
     private String email;
 
-    public Cliente(String nombre, int edad, String direccion, String imagen, String telefono, String fechaRegistro, String email) {
+    public Cliente(String nombre, String edad, String direccion, String imagen, String telefono, String fechaRegistro, String email) {
     	this.id = UUID.randomUUID().toString();
     	this.nombre = nombre;
         this.edad = edad;
@@ -41,11 +41,11 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public int getEdad() {
+    public String getEdad() {
         return edad;
     }
 
-    public void setEdad(int edad) {
+    public void setEdad(String edad) {
         this.edad = edad;
     }
 
