@@ -35,7 +35,7 @@ public class ObjetoService {
 		return objetoRepository.save(objeto);
 	}
 	public Objeto findById(String id) {
-		return objetoRepository.findById(id).orElse(null);
+		return objetoRepository.findById(id);
 	}
 	public List<Objeto> findAll() {
 		return objetoRepository.findAll();

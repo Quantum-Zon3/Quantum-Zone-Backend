@@ -10,7 +10,7 @@ import com.example.Quantum_Zone_Backend.modelo.Consola;
 public class ConsolaService {
 	private final ConsolaRepository consolaRepository;
 	@Autowired
-	public ConsolaService(ConsolaRepository consolaRepository) {
+	public ConsolaService(ConsolaRepository consolaRepository ) {
 		this.consolaRepository = consolaRepository;
 		// Inicializamos algunos datos
 		initSampleData();
@@ -33,7 +33,7 @@ public class ConsolaService {
 	}
 	// encontrar una consola por id
 	public Consola findById(String id) {
-		return consolaRepository.findById(id).orElse(null);
+		return consolaRepository.findById(id);
 	}
 	// listar todas las consolas
 	public List<Consola> findAll() {

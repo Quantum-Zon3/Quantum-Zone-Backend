@@ -31,7 +31,7 @@ public class AdministradorService {
 	}
 	// encontrar un administrador por id
 	public Administrador findById(String id) {
-		return administradorRepository.findById(id).orElse(null);
+		return administradorRepository.findById(id);
 	}
 	// listar todos los administradores
 	public List<Administrador> findAll() {

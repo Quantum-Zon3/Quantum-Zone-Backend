@@ -1,4 +1,5 @@
 package com.example.Quantum_Zone_Backend.service;
+import java.time.LocalDate;
 import java.util.List;
 import com.example.Quantum_Zone_Backend.repository.ClienteRepository;
 import java.util.Map;
@@ -17,11 +18,11 @@ public class ClienteService {
 	}
 	private void initSampleData() {
 		// Crear Clientes
-		Cliente cliente1 = new Cliente("Juan Perez", 30, "123 Main St", "imagen1.jpg", "555-1234", "2023-01-01", "juan.perez@example.com");
-		Cliente cliente2 = new Cliente("Maria Gomez", 25, "456 Elm St", "imagen2.jpg", "555-5678", "2023-02-01", "maria.gomez@example.com");
-		Cliente cliente3 = new Cliente("Carlos Ruiz", 40, "789 Oak St", "imagen3.jpg", "555-8765", "2023-03-01", "carlos.ruiz@example.com");
-		Cliente cliente4 = new Cliente("Ana Lopez", 35, "321 Pine St", "imagen4.jpg", "555-4321", "2023-04-01", "ana.lopez@example.com");
-		Cliente cliente5 = new Cliente("Luis Martinez", 28, "654 Maple St", "imagen5.jpg", "555-6789", "2023-05-01", "luis.martinez@example.com");
+		Cliente cliente1 = new Cliente("Juan Perez", 30, "123 Main St", "imagen1.jpg", "555-1234", LocalDate.now() , "juan.perez@example.com");
+		Cliente cliente2 = new Cliente("Maria Gomez", 25, "456 Elm St", "imagen2.jpg", "555-5678", LocalDate.now(), "maria.gomez@example.com");
+		Cliente cliente3 = new Cliente("Carlos Ruiz", 40, "789 Oak St", "imagen3.jpg", "555-8765", LocalDate.now(), "carlos.ruiz@example.com");
+		Cliente cliente4 = new Cliente("Ana Lopez", 35, "321 Pine St", "imagen4.jpg", "555-4321", LocalDate.now(), "ana.lopez@example.com");
+		Cliente cliente5 = new Cliente("Luis Martinez", 28, "654 Maple St", "imagen5.jpg", "555-6789", LocalDate.now(), "luis.martinez@example.com");
 
 		// Guardar clientes en la base de datos
 		save(cliente1);
@@ -37,7 +38,7 @@ public class ClienteService {
 	}
 	// encontrar un cliente por id
 	public Cliente findById(String id) {
-		return clienteRepository.findById(id).orElse(null);
+		return clienteRepository.findById(id);
 	}
 	// listar todos los clientes
 	public List<Cliente> findAll() {
