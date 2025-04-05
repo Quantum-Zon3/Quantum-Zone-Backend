@@ -18,9 +18,9 @@ public class VideoJuegoService {
 	}
 		private void initSampleData() {
 		// Crear videojuegos
-		VideoJuego videojuego1 = new VideoJuego("The Last of Us Part II", "Acción/Aventura", "Naughty Dog", LocalDate.now(), "PS4");
-		VideoJuego videojuego2 = new VideoJuego("God of War", "Acción/Aventura", "Santa Monica Studio", LocalDate.now(), "PS4");
-		VideoJuego videojuego3 = new VideoJuego("Halo Infinite", "Disparos en primera persona", "343 Industries", LocalDate.now(), "Xbox Series X|S");
+			VideoJuego videojuego1 = new VideoJuego("The Last of Us Part II", LocalDate.now(), "Un juego de acción y aventura", "Adultos", "Acción/Aventura");
+		    VideoJuego videojuego2 = new VideoJuego("God of War", LocalDate.now(), "Un juego de acción y aventura mitológica", "Adultos", "Acción/Aventura");
+		    VideoJuego videojuego3 = new VideoJuego("Halo Infinite", LocalDate.now(), "Un juego de disparos en primera persona", "Adolescentes", "Disparos en primera persona");
 		
 		// Guardar videojuegos en la base de datos
 		save(videojuego1);
@@ -48,7 +48,7 @@ public class VideoJuegoService {
 		public VideoJuego update(VideoJuego videojuego) {
 			return videojuegoRepository.update(videojuego);
 		}
-		public List<VideoJuego> findByFilters(String nombre, String genero, String desarrollador) {
-			return videojuegoRepository.findByFilters(nombre, genero, desarrollador);
+		public List<VideoJuego> findByFilters(String nombre, LocalDate fechaDePubliacion, String descripcion, String publico, String tipo) {
+			return videojuegoRepository.findByFilters(nombre, fechaDePubliacion, descripcion, publico, tipo);
 		}
 }

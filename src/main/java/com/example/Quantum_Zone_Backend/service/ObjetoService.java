@@ -46,7 +46,7 @@ public class ObjetoService {
 	public Objeto update(Objeto objeto) {
 		return objetoRepository.update(objeto);
 	}
-	public List<Objeto> findByFilters(String nombre, String descripcion, String tipo) {
-		return objetoRepository.findByFilters(nombre, descripcion, tipo);
+	public List<Objeto> findByFilters(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
+		return objetoRepository.findByFilters(nombre, descripcion, fecha, estado, categoria);
 	}
 }
