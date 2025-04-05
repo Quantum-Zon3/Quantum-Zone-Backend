@@ -53,8 +53,8 @@ public class ClienteService {
 		return clienteRepository.update(cliente);
 	}
 	// buscar cliente por filtros
-	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String telefono, LocalDate fechaRegistro, String email) {
-		return clienteRepository.findByFilters(nombre, edad, direccion, imagen, telefono, fechaRegistro, email);
+	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String cedula , String telefono, LocalDate fechaRegistro, String email) {
+		return clienteRepository.findByFilters(nombre, edad, direccion, imagen, cedula, telefono, fechaRegistro, email);
 	}
 
 }
