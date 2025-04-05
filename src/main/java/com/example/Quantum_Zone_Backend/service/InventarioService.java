@@ -6,9 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Quantum_Zone_Backend.modelo.Consola;
-import com.example.Quantum_Zone_Backend.modelo.Inventario;
-import com.example.Quantum_Zone_Backend.modelo.Puesto;
+import com.example.Quantum_Zone_Backend.modelo.*;
 public class InventarioService {
 	@Autowired
 	private final InventarioRepository inventarioRepository;
@@ -86,8 +84,8 @@ public class InventarioService {
 		return inventarioRepository.update(inventario);
 	}
 	
-	public List<Inventario> findByFilters(String nombre, String ubicacion, String descripcion) {
-		return inventarioRepository.findByFilters(nombre, ubicacion, descripcion);
+	public List<Inventario> findByFilters(Map<String,Consola> consolas, Map<String,VideoJuego> videoJuegos, Map<String , Objeto> objetos, Map<String, Puesto> puestos) {
+		return inventarioRepository.findByFilters(consolas, videoJuegos, objetos, puestos);
 	}
 
 }

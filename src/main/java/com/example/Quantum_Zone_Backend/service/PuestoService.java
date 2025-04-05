@@ -47,8 +47,8 @@ public class PuestoService {
 		return puestoRepository.update(puesto);
 	}
 	// buscar puesto por filtros
-	public List<Puesto> findByFilters(String nombre, String ubicacion, String descripcion) {
-		return puestoRepository.findByFilters(nombre, ubicacion, descripcion);
+	public List<Puesto> findByFilters(String numeroDePuesto, Consola consola, int cantidadDeSillas, int cantidadDeControles) {
+		return puestoRepository.findByFilters(numeroDePuesto, consola, cantidadDeSillas, cantidadDeControles);
 	}
 	
 }
