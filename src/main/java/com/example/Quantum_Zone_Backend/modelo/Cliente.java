@@ -101,14 +101,19 @@ public class Cliente {
     public String getId() {
     	return id;
     }
-	@Override
-	public String toString() {
-		return "Cliente [id=" + id + ", nombre=" + nombre + ", edad=" + edad + ", direccion=" + direccion + ", imagen="
-				+ imagen + ", cedula=" + cedula + ", telefono=" + telefono + ", fechaRegistro=" + fechaRegistro
-				+ ", email=" + email + "]";
-	}
-    
-    
-    
 
+    @Override
+    public String toString() {
+		return "Cliente{" +
+				"id='" + id + '\'' +
+				", nombre='" + nombre + '\'' +
+				", edad=" + edad +
+				", direccion='" + direccion + '\'' +
+				", imagen='" + imagen + '\'' +
+				", cedula='" + cedula + '\'' +
+				", telefono='" + telefono + '\'' +
+				", fechaRegistro='" + fechaRegistro + '\'' +
+				", email='" + email + '\'' +
+				'}';
+	}
 }
