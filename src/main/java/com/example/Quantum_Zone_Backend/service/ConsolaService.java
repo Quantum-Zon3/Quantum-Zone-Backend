@@ -17,9 +17,9 @@ public class ConsolaService {
 	}
 	private void initSampleData() {
 		// Crear Consolas
-		Consola consola1 = new Consola("PlayStation 5", "2020-11-12", "La PlayStation 5 es una consola de videojuegos de última generación desarrollada por Sony.", "Sony", LocalDate.now());
-		Consola consola2 = new Consola("Xbox Series X", "2020-11-10", "La Xbox Series X es una consola de videojuegos de última generación desarrollada por Microsoft.", "Microsoft", LocalDate.now());
-		Consola consola3 = new Consola("Nintendo Switch", "2017-03-03", "La Nintendo Switch es una consola de videojuegos híbrida desarrollada por Nintendo.", "Nintendo", LocalDate.now());
+		Consola consola1 = new Consola("Sony", "PlayStation 5", LocalDate.now());
+		Consola consola2 = new Consola("Microsoft", "Xbox Series X", LocalDate.now());
+		Consola consola3 = new Consola("Nintendo", "Nintendo Switch", LocalDate.now());
 		
 		// Guardar consolas en la base de datos
 		save(consola1);

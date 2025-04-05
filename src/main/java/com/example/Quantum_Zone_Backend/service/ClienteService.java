@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.util.List;
 import com.example.Quantum_Zone_Backend.repository.ClienteRepository;
 import java.util.Map;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.modelo.Cliente;
@@ -17,12 +19,13 @@ public class ClienteService {
 		initSampleData();
 	}
 	private void initSampleData() {
+		Random random = new Random();
 		// Crear Clientes
-		Cliente cliente1 = new Cliente("Juan Perez", 30, "123 Main St", "imagen1.jpg", "555-1234", LocalDate.now() , "juan.perez@example.com");
-		Cliente cliente2 = new Cliente("Maria Gomez", 25, "456 Elm St", "imagen2.jpg", "555-5678", LocalDate.now(), "maria.gomez@example.com");
-		Cliente cliente3 = new Cliente("Carlos Ruiz", 40, "789 Oak St", "imagen3.jpg", "555-8765", LocalDate.now(), "carlos.ruiz@example.com");
-		Cliente cliente4 = new Cliente("Ana Lopez", 35, "321 Pine St", "imagen4.jpg", "555-4321", LocalDate.now(), "ana.lopez@example.com");
-		Cliente cliente5 = new Cliente("Luis Martinez", 28, "654 Maple St", "imagen5.jpg", "555-6789", LocalDate.now(), "luis.martinez@example.com");
+		Cliente cliente1 = new Cliente("Juan Perez", 30, "123 Main St", "imagen1.jpg",String.valueOf(random.nextInt(0,1000)), "555-1234", LocalDate.now() , "juan.perez@example.com");
+		Cliente cliente2 = new Cliente("Maria Gomez", 25, "456 Elm St", "imagen2.jpg",String.valueOf(random.nextInt(0,1000)), "555-5678", LocalDate.now(), "maria.gomez@example.com");
+		Cliente cliente3 = new Cliente("Carlos Ruiz", 40, "789 Oak St", "imagen3.jpg",String.valueOf(random.nextInt(0,1000)), "555-8765", LocalDate.now(), "carlos.ruiz@example.com");
+		Cliente cliente4 = new Cliente("Ana Lopez", 35, "321 Pine St", "imagen4.jpg",String.valueOf(random.nextInt(0,1000)), "555-4321", LocalDate.now(), "ana.lopez@example.com");
+		Cliente cliente5 = new Cliente("Luis Martinez", 28, "654 Maple St", "imagen5.jpg",String.valueOf(random.nextInt(0,1000)), "555-6789", LocalDate.now(), "luis.martinez@example.com");
 
 		// Guardar clientes en la base de datos
 		save(cliente1);
@@ -53,8 +56,8 @@ public class ClienteService {
 		return clienteRepository.update(cliente);
 	}
 	// buscar cliente por filtros
-	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String telefono, LocalDate fechaRegistro, String email) {
-		return clienteRepository.findByFilters(nombre, edad, direccion, imagen, telefono, fechaRegistro, email);
+	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String cedula , String telefono, LocalDate fechaRegistro, String email) {
+		return clienteRepository.findByFilters(nombre, edad, direccion, imagen, cedula, telefono, fechaRegistro, email);
 	}
 
 }
