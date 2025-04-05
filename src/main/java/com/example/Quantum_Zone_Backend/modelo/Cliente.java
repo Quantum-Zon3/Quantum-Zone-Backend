@@ -20,12 +20,13 @@ public class Cliente {
     private LocalDate fechaRegistro;
     private String email;
 
-    public Cliente(String nombre, int edad, String direccion, String imagen, String telefono, LocalDate fechaRegistro, String email) {
+    public Cliente(String nombre, int edad, String direccion, String imagen,String cedula, String telefono, LocalDate fechaRegistro, String email) {
     	this.id = UUID.randomUUID().toString();
     	this.nombre = nombre;
         this.edad = edad;
         this.direccion = direccion;
         this.imagen = imagen;
+        this.cedula = cedula;
         this.telefono = telefono;
         this.fechaRegistro = fechaRegistro;
         this.email = email;
@@ -100,6 +101,7 @@ public class Cliente {
     public String getId() {
     	return id;
     }
+
     @Override
     public String toString() {
 		return "Cliente{" +
@@ -114,6 +116,4 @@ public class Cliente {
 				", email='" + email + '\'' +
 				'}';
 	}
-    
-
 }
