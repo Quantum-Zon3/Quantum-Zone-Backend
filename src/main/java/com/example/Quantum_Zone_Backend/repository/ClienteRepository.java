@@ -38,7 +38,7 @@ public class ClienteRepository {
 		return null;
 	}
 	//Buscar cliente por filtros
-	public List<Cliente> findByFilters(String nombre, String edad, String direccion, String imagen, String cedula, String telefono, LocalDate fechaRegistro, String email) {
+	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String cedula, String telefono, LocalDate fechaRegistro, String email) {
 		return baseDeDatos.values().stream()
 				.filter(cliente -> nombre == null || cliente.getNombre().equalsIgnoreCase(nombre))
 				.filter(cliente -> cliente.getEdad() == 0)

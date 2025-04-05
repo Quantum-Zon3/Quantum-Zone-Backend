@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 import com.example.Quantum_Zone_Backend.modelo.Puesto;
-
+import com.example.Quantum_Zone_Backend.modelo.Consola;
 @Repository
 public class PuestoRepository {
 	private final Map<String, Puesto> baseDeDatos = new HashMap<>();
@@ -38,10 +38,10 @@ public class PuestoRepository {
 		return null;
 	}
 	//Buscar puesto por filtros
-	public List<Puesto> findByFilters(String numeroDePuesto, String consola, int cantidadDeSillas, int cantidadDeControles) {
+	public List<Puesto> findByFilters(String numeroDePuesto, Consola consola, int cantidadDeSillas, int cantidadDeControles) {
 		return baseDeDatos.values().stream()
-				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equalsIgnoreCase(numeroDePuesto))
-				.filter(consola1 -> consola == null || consola1.getConsola().equalsIgnoreCase(consola))
+				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equals(numeroDePuesto))
+				.filter(consola1 -> consola == null || consola1.getConsola().equals(consola))
 				.filter(consola1 -> consola1.getCantidadDeSillas() == 0)
 				.filter(consola1 -> consola1.getCanditadDeControles() == 0)
 				.collect(Collectors.toList());
