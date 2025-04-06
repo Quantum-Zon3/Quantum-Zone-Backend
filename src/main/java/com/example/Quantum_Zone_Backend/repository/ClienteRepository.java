@@ -41,7 +41,7 @@ public class ClienteRepository {
 	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen,String cedula, String telefono, LocalDate fechaRegistro, String email) {
 		return baseDeDatos.values().stream()
 				.filter(cliente -> nombre == null || cliente.getNombre().equalsIgnoreCase(nombre))
-				.filter(cliente -> cliente.getEdad() == 0)
+				.filter(cliente -> edad == 0 || cliente.getEdad() == edad)
 				.filter(cliente -> direccion == null || cliente.getDireccion().equalsIgnoreCase(direccion))
 				.filter(cliente -> imagen == null || cliente.getImagen().equalsIgnoreCase(imagen))
 				.filter(cliente -> cedula == null || cliente.getCedula().equalsIgnoreCase(cedula))
