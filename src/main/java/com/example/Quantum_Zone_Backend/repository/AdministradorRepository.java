@@ -44,7 +44,7 @@ public class AdministradorRepository {
 		return baseDeDatos.values().stream()
 				.filter(administrador -> nombre == null || administrador.getNombre().equalsIgnoreCase(nombre))
 				.filter(administrador -> cedula == null || administrador.getCedula().equalsIgnoreCase(cedula))
-				.filter(administrador -> administrador.getEdad() == 0)
+				.filter(cliente -> edad == 0 || cliente.getEdad() == edad)
 				.filter(administrador -> administrador.getContraseña() == null || administrador.getContraseña().equalsIgnoreCase(administrador.getContraseña()))
 				.collect(Collectors.toList());
 		
