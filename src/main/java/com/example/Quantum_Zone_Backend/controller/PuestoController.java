@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.Quantum_Zone_Backend.modelo.Consola;
 import com.example.Quantum_Zone_Backend.modelo.Puesto;
 import com.example.Quantum_Zone_Backend.service.PuestoService;
@@ -79,13 +85,18 @@ public class PuestoController {
 	}
 	//Buscar puesto por filtros
 	@GetMapping("/buscar")
+	
 	public ResponseEntity<List<Puesto>> getPuestos(
+			
 			@RequestParam(required = false) String numeroDePuesto,
 			@RequestParam(required = false) Consola consola,
 			@RequestParam(required = false) int cantidadDeSillas,
 			@RequestParam(required = false) int canditadDeControles) {
 		
 		List<Puesto> puestosFiltrados = puestoService.findByFilters(numeroDePuesto, consola, cantidadDeSillas, canditadDeControles);
+		if (puestosFiltrados.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 		return new ResponseEntity<>(puestosFiltrados, HttpStatus.OK);
 	}
 }
