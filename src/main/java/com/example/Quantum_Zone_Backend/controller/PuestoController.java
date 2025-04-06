@@ -28,6 +28,7 @@ import com.example.Quantum_Zone_Backend.service.PuestoService;
 
 @RestController
 @RequestMapping("/quantumZone/puestos")
+@Tag(name = "Puestos", description = "API para la gestion de puestos")
 public class PuestoController {
 
 	private final PuestoService puestoService;
@@ -39,6 +40,11 @@ public class PuestoController {
 	
 	//Obtener todos los puestos
 	@GetMapping
+	@Operation(summary = "Obtener todos los puestos", description = "Devuelve una lista de todos los puestos registrados.")
+	@ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de puestos obtenida con éxito"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
 	public ResponseEntity<List<Puesto>> getAllPuestos() {
 		List<Puesto> puestos = puestoService.findAll();
 		return new ResponseEntity<>(puestos, HttpStatus.OK);
@@ -46,7 +52,12 @@ public class PuestoController {
 	
 	//Obtener puesto por id
 	@GetMapping("/{id}")
-	public ResponseEntity<Puesto> getPuestoById(@PathVariable String id) {
+	@Operation(summary = "Obtener puestos por ID", description = "Devuelve un puesto específico basado en su ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "puesto encontrado"),
+            @ApiResponse(responseCode = "404", description = "puesto no encontrado")
+    })
+	public ResponseEntity<Puesto> getPuestoById(@PathVariable  @Parameter(description = "ID del puesto")  String id) {
 		Puesto puesto = puestoService.findById(id);
 		if (puesto != null) {
 			return new ResponseEntity<>(puesto, HttpStatus.OK);
@@ -56,13 +67,23 @@ public class PuestoController {
 	}
 	//Crear puesto
 	@PostMapping
-	public ResponseEntity<Puesto> createPuesto(@RequestBody Puesto puesto) {
+	@Operation(summary = "Crear puesto", description = "Crea un nuevo puesto en el sistema.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Puesto creado con éxito"),
+			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
+	})
+	public ResponseEntity<Puesto> createPuesto(@RequestBody @Parameter(description = "Datos del puesto a crear") Puesto puesto) {
 		Puesto nuevoPuesto = puestoService.save(puesto);
 		return new ResponseEntity<>(nuevoPuesto, HttpStatus.CREATED);
 	}
 	//Actualizar puesto
+	@Operation(summary = "Actualizar puesto", description = "Actualiza un puesto existente en el sistema.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Puesto actualizado con éxito"),
+			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
+	})
 	@PutMapping("/{id}")
-	public ResponseEntity<Puesto> updatePuesto(@PathVariable String id, @RequestBody Puesto puesto) {
+	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") String id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
 		Puesto puestoExistente = puestoService.findById(id);		
 		if (puestoExistente != null) {
 			
@@ -74,7 +95,12 @@ public class PuestoController {
 	}
 	//Eliminar puesto
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletePuesto(@PathVariable String id) {
+	@Operation(summary = "Eliminar puesto", description = "Elimina un puesto existente del sistema.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "204", description = "Puesto eliminado con éxito"),
+			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
+	})
+	public ResponseEntity<Void> deletePuesto(@PathVariable @Parameter(description = "ID del puestoo") String id) {
 		Puesto puestoExistente = puestoService.findById(id);
 		if (puestoExistente != null) {
 			puestoService.deleteById(id);
@@ -85,14 +111,17 @@ public class PuestoController {
 	}
 	//Buscar puesto por filtros
 	@GetMapping("/buscar")
-	
+	@Operation(summary = "Buscar puestos por filtros", description = "Devuelve una lista de puestos que coinciden con los filtros proporcionados.")
+		@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Lista de puestos filtrados obtenida con éxito"),
+			@ApiResponse(responseCode = "204", description = "No se encontraron puestos que coincidan con los filtros")
+	})
 	public ResponseEntity<List<Puesto>> getPuestos(
 			
-			@RequestParam(required = false) String numeroDePuesto,
-			@RequestParam(required = false) Consola consola,
-			@RequestParam(required = false) int cantidadDeSillas,
-			@RequestParam(required = false) int canditadDeControles) {
-		
+			@RequestParam(required = false)  @Parameter (description = "Numero de puestos en puesto") String numeroDePuesto,
+			@RequestParam(required = false)  @Parameter (description = "Consola en la que esta el puesto")Consola consola,
+			@RequestParam(required = false)  @Parameter (description = "Cantidad de filas en puesto")int cantidadDeSillas,
+			@RequestParam(required = false)  @Parameter (description = "Cantidad de controles para la consola del puesto")int canditadDeControles) {		
 		List<Puesto> puestosFiltrados = puestoService.findByFilters(numeroDePuesto, consola, cantidadDeSillas, canditadDeControles);
 		if (puestosFiltrados.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
