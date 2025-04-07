@@ -32,11 +32,11 @@ public class VideoJuegoRepository {
     }
 	public List<VideoJuego> findByFilters(String nombre, LocalDate fechaDePublicacion,String descripcion, String publico, String tipo) {
 		return baseDeDatos.values().stream()
-				.filter(videojuego -> videojuego.getNombre().equalsIgnoreCase(nombre))
-				.filter(videojuego -> videojuego.getFechaDePubliacion().equals(fechaDePublicacion))
-				.filter(videojuego -> videojuego.getPublico().equalsIgnoreCase(publico))
-				.filter(videojuego -> videojuego.getTipo().equalsIgnoreCase(tipo))
-				.filter(videojuego -> videojuego.getDescripcion().equalsIgnoreCase(descripcion))
+				.filter(videojuego -> nombre == null || videojuego.getNombre().equalsIgnoreCase(nombre))
+				.filter(videojuego -> fechaDePublicacion == null || videojuego.getFechaDePubliacion().equals(fechaDePublicacion))
+				.filter(videojuego -> publico == null || videojuego.getPublico().equalsIgnoreCase(publico))
+				.filter(videojuego -> tipo == null || videojuego.getTipo().equalsIgnoreCase(tipo))
+				.filter(videojuego -> descripcion == null || videojuego.getDescripcion().equalsIgnoreCase(descripcion))
 				.collect(Collectors.toList());
 	}
 }
