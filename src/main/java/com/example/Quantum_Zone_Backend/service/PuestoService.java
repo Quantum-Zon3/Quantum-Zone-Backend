@@ -9,11 +9,13 @@ import com.example.Quantum_Zone_Backend.modelo.Puesto;
 public class PuestoService {
 	private final PuestoRepository puestoRepository;
 	private final ConsolaService consolaService;
+	private final InventarioService inventarioService;
 	
 	@Autowired
-	public PuestoService(PuestoRepository puestoRepository, ConsolaService consolaService) {
+	public PuestoService(PuestoRepository puestoRepository, ConsolaService consolaService, InventarioService inventarioService) {
 		this.puestoRepository = puestoRepository;
 		this.consolaService = consolaService;
+		this.inventarioService = inventarioService;
 		// Inicializamos algunos datos
 		initSampleData();
 	}
@@ -28,6 +30,7 @@ public class PuestoService {
 	}
 	// guardar un puesto
 	public Puesto save(Puesto puesto) {
+		inventarioService.savePuesto(puesto);
 		return puestoRepository.save(puesto);
 	}
 	// encontrar un puesto por id
