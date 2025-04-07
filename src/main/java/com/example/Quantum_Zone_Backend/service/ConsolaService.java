@@ -9,9 +9,11 @@ import com.example.Quantum_Zone_Backend.modelo.Consola;
 @Service
 public class ConsolaService {
 	private final ConsolaRepository consolaRepository;
+	private final InventarioService inventarioService;
 	@Autowired
-	public ConsolaService(ConsolaRepository consolaRepository ) {
+	public ConsolaService(ConsolaRepository consolaRepository,InventarioService inventarioService) {
 		this.consolaRepository = consolaRepository;
+		this.inventarioService = inventarioService;
 		// Inicializamos algunos datos
 		initSampleData();
 	}
@@ -29,6 +31,7 @@ public class ConsolaService {
 	}
 	// guardar una consola
 	public Consola save(Consola consola) {
+		inventarioService.saveConsola(consola);
 		return consolaRepository.save(consola);
 	}
 	// encontrar una consola por id

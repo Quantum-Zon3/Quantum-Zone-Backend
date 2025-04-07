@@ -9,9 +9,11 @@ import com.example.Quantum_Zone_Backend.modelo.Objeto;
 @Service
 public class ObjetoService {
 	private final ObjetoRepository objetoRepository;
+	private final InventarioService inventarioService;
 	@Autowired
-	public ObjetoService(ObjetoRepository objetoRepository) {
+	public ObjetoService(ObjetoRepository objetoRepository , InventarioService inventarioService) {
 		this.objetoRepository = objetoRepository;
+		this.inventarioService = inventarioService;
 		// Inicializamos algunos datos
 		initSampleData();
 	}
@@ -32,6 +34,7 @@ public class ObjetoService {
 		
 	}
 	public Objeto save(Objeto objeto) {
+		inventarioService.saveObjeto(objeto);
 		return objetoRepository.save(objeto);
 	}
 	public Objeto findById(String id) {

@@ -9,10 +9,12 @@ import com.example.Quantum_Zone_Backend.repository.VideoJuegoRepository;
 @Service
 public class VideoJuegoService {
 	private final VideoJuegoRepository videojuegoRepository;
+	private final InventarioService inventarioService;
 	
 	@Autowired
-	public VideoJuegoService(VideoJuegoRepository videojuegoRepository) {
+	public VideoJuegoService(VideoJuegoRepository videojuegoRepository ,InventarioService inventarioService) {
 		this.videojuegoRepository = videojuegoRepository;
+		this.inventarioService = inventarioService;
 		// Inicializamos algunos datos
 		initSampleData();
 	}
@@ -30,8 +32,10 @@ public class VideoJuegoService {
 	}
 		// guardar un videojuego
 		public VideoJuego save(VideoJuego videojuego) {
+			inventarioService.saveVideoJuego(videojuego);
 			return videojuegoRepository.save(videojuego);
 		}
+		
 		// encontrar un videojuego por id
 		public VideoJuego findById(String id) {
 			return videojuegoRepository.findById(id);
