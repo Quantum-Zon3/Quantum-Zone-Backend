@@ -74,6 +74,7 @@ public class Objeto {
 	public void setCategoria(String categoria) {
 		Categoria = categoria;
 	}
+	
 
 	@Override
 	public String toString() {

@@ -51,6 +51,9 @@ public class Consola {
     public String getId() {
 		return id;
 	}
+    	public void setId(String id) {
+		this.id = id;
+	}
 	@Override
 	public String toString() {
 		return "Consola [id=" + id + ", marca=" + marca + ", consola=" + consola + ", fechaDePublicacion="
