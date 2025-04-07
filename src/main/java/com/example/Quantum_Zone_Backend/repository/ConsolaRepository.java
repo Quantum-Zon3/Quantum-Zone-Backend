@@ -42,9 +42,9 @@ public class ConsolaRepository {
 	 //Buscar consola por filtros
 	 public List<Consola> findByFilters(String marca, String consola, LocalDate fechaDePublicacion) {
 		 return baseDeDatos.values().stream()
-				 .filter(consola1 -> consola1.getMarca().equalsIgnoreCase(marca))
-				 .filter(consola1 -> consola1.getConsola().equalsIgnoreCase(consola))
-				 .filter(consola1 -> consola1.getFechaDePublicacion().equals(fechaDePublicacion))
+				 .filter(consola1 -> marca == null || consola1.getMarca().equalsIgnoreCase(marca))
+				 .filter(consola1 -> consola == null || consola1.getConsola().equalsIgnoreCase(consola))
+				 .filter(consola1 -> fechaDePublicacion == null || consola1.getFechaDePublicacion().equals(fechaDePublicacion))
 				 .collect(Collectors.toList());
 		 
 	 }
