@@ -22,6 +22,9 @@ public class Inventario {
 	public String getId() {
 		return id;
 	}
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Map<String, Consola> getConsolas() {
 		return consolas;
