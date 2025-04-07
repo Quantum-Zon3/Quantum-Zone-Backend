@@ -42,8 +42,8 @@ public class PuestoRepository {
 		return baseDeDatos.values().stream()
 				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equals(numeroDePuesto))
 				.filter(consola1 -> consola == null || consola1.getConsola().equals(consola))
-				.filter(consola1 -> consola1.getCantidadDeSillas() == 0)
-				.filter(consola1 -> consola1.getCanditadDeControles() == 0)
+				.filter(consola1 -> cantidadDeSillas == 0 || consola1.getCantidadDeSillas() == cantidadDeSillas)
+				.filter(consola1 -> cantidadDeControles == 0  || consola1.getCanditadDeControles() == cantidadDeControles)
 				.collect(Collectors.toList());
 		
 	}
