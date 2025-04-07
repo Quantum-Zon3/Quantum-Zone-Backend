@@ -87,7 +87,7 @@ public class VideojuegoController {
 	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "ID del videojuego") String id, @RequestBody @Parameter(description = "Datos Actualizados del videojuego") VideoJuego videojuego) {
 		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
 		if (videojuegoExistente != null) {
-			setId(id);
+			videojuegoExistente.setId(id);
 			VideoJuego videojuegoActualizado = videoJuegoService.update(videojuego);
 			return new ResponseEntity<>(videojuegoActualizado, HttpStatus.OK);
 		} else {

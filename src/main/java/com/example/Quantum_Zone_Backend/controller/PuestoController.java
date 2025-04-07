@@ -86,7 +86,7 @@ public class PuestoController {
 	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") String id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
 		Puesto puestoExistente = puestoService.findById(id);		
 		if (puestoExistente != null) {
-			setId(id);
+			puestoExistente.setId(id);
 			Puesto puestoActualizado = puestoService.update(puesto);
 			return new ResponseEntity<>(puestoActualizado, HttpStatus.OK);
 		} else {
