@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.modelo.*;
 import com.example.Quantum_Zone_Backend.repository.InventarioRepository;
+@Service
 public class InventarioService {
 	@Autowired
 	private final InventarioRepository inventarioRepository;
