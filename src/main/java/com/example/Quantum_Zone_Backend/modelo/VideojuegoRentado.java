@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import com.example.Quantum_Zone_Backend.modelo.*;
 
 public class VideojuegoRentado {
+        private String id;
 	private Cliente cliente;
 	private VideoJuego videojuego;
 	private LocalDate fechaAlquiler;
@@ -48,11 +49,17 @@ public class VideojuegoRentado {
         this.fechaDevolucion = fechaDevolucion;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "VideojuegoRentado{" + "cliente=" + cliente + ", videojuego=" + videojuego + ", fechaAlquiler=" + fechaAlquiler + ", fechaDevolucion=" + fechaDevolucion + '}';
+        return "VideojuegoRentado{" + "id=" + id + ", cliente=" + cliente + ", videojuego=" + videojuego + ", fechaAlquiler=" + fechaAlquiler + ", fechaDevolucion=" + fechaDevolucion + '}';
     }
-	
     
-	
 }
