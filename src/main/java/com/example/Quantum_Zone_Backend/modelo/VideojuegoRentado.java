@@ -2,6 +2,7 @@ package com.example.Quantum_Zone_Backend.modelo;
 import java.time.LocalDate;
 
 import com.example.Quantum_Zone_Backend.modelo.*;
+import java.util.UUID;
 
 public class VideojuegoRentado {
         private String id;
@@ -11,7 +12,8 @@ public class VideojuegoRentado {
 	private LocalDate fechaDevolucion;
 	
 	public VideojuegoRentado(Cliente cliente, VideoJuego videojuego, LocalDate fechaAlquiler, LocalDate fechaDevolucion) {
-		this.cliente = cliente;
+		this.id = UUID.randomUUID().toString();
+                this.cliente = cliente;
 		this.videojuego = videojuego;
 		this.fechaAlquiler = fechaAlquiler;
 		this.fechaDevolucion = fechaDevolucion;
