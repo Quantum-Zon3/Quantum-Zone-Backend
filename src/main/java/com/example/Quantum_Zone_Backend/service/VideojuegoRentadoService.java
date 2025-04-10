@@ -39,7 +39,7 @@ public class VideojuegoRentadoService {
 		List<Cliente> clientes = clienteService.findAll();
                 List<VideoJuego> videojuegos = videojuegoService.findAll();
 		for (int i = 0; i <clientes.size() ; i++) {
-                    for(int j=0; i<videojuegos.size(); j++){
+                    for(int j=0; j<videojuegos.size(); j++){
                     	
 						VideojuegoRentado videojuegoRentado = new VideojuegoRentado(clientes.get(0), videojuegos.get(0), LocalDate.now(), LocalDate.now().plusDays(2));
 						save(videojuegoRentado);
