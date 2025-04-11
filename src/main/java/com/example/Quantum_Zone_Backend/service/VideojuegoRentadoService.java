@@ -69,9 +69,9 @@ public class VideojuegoRentadoService {
 	}
 
 	// buscar puesto por filtros
-	public List<VideojuegoRentado> findByFilters(String id, Cliente cliente, VideoJuego videojuego,
+	public List<VideojuegoRentado> findByFilters(String id, String cedula, VideoJuego videojuego,
 			LocalDate fechaDeRenta, LocalDate fechaDeDevolucion) {
-		return videojuegoRRepository.findByFilters(id, fechaDeRenta, fechaDeDevolucion, cliente, videojuego);
+		return videojuegoRRepository.findByFilters(id, fechaDeRenta, fechaDeDevolucion, cedula, videojuego);
 	}
 
 	public VideojuegoRentado save(VideojuegoRentado videojuegoR) {
