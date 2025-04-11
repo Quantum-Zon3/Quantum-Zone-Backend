@@ -32,7 +32,6 @@ public class VideoJuegoService {
 	}
 		// guardar un videojuego
 		public VideoJuego save(VideoJuego videojuego) {
-			inventarioService.saveVideoJuego(videojuego);
 			return videojuegoRepository.save(videojuego);
 		}
 		

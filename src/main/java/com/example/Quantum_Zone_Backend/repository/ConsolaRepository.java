@@ -48,4 +48,9 @@ public class ConsolaRepository {
 				 .collect(Collectors.toList());
 		 
 	 }
+	 public List<Consola> findByNombre(String nombre) {
+	        return baseDeDatos.values().stream()
+	                .filter(consola -> nombre == null || consola.getConsola().equalsIgnoreCase(nombre))
+	                .collect(Collectors.toList());
+	    }
 }

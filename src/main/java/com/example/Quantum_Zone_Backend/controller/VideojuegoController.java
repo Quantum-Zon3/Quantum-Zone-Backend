@@ -66,7 +66,7 @@ public class VideojuegoController {
 	}
 	
 	// Crear videojuego
-	@PostMapping("/{id}")
+	@PostMapping
 	@Operation(summary = "Crear un nuevo videojuego", description = "Crea un nuevo videojuego con los datos proporcionados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "videojuego agregado con éxito"),
@@ -84,11 +84,11 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "Videojuego actualizado con éxito"),
             @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     })
-	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "ID del videojuego") String id, @RequestBody @Parameter(description = "Datos Actualizados del videojuego") VideoJuego videojuego) {
+	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "id") String id, @RequestBody @Parameter(description = "videojuego") VideoJuego videojuego) {
 		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
 		if (videojuegoExistente != null) {
-			videojuegoExistente.setId(id);
-			VideoJuego videojuegoActualizado = videoJuegoService.update(videojuego);
+			videojuego.setId(id);
+			VideoJuego videojuegoActualizado = videoJuegoService.update(videojuego);			
 			return new ResponseEntity<>(videojuegoActualizado, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

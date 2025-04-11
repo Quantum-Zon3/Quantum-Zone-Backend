@@ -77,16 +77,16 @@ public class PuestoController {
 		return new ResponseEntity<>(nuevoPuesto, HttpStatus.CREATED);
 	}
 	//Actualizar puesto
+	@PutMapping("/{id}")
 	@Operation(summary = "Actualizar puesto", description = "Actualiza un puesto existente en el sistema.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Puesto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
-	})
-	@PutMapping("/{id}")
+	})	
 	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") String id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
 		Puesto puestoExistente = puestoService.findById(id);		
 		if (puestoExistente != null) {
-			puestoExistente.setId(id);
+			puesto.setId(id);
 			Puesto puestoActualizado = puestoService.update(puesto);
 			return new ResponseEntity<>(puestoActualizado, HttpStatus.OK);
 		} else {

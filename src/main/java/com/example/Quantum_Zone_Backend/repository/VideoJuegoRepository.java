@@ -7,9 +7,21 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
 import java.time.LocalDate;
+import jakarta.annotation.PostConstruct;
 @Repository
 public class VideoJuegoRepository {
-	private final Map<String, VideoJuego> baseDeDatos = new HashMap<>();
+	private boolean initialized = false;
+    @PostConstruct
+    public void init() {
+        if (!initialized) {
+            System.out.println("Inicializando repositorio de categorias");
+
+            initialized = true;
+        }
+    }
+    	// Simulando una base de datos en memoria
+	private final Map<String, VideoJuego> baseDeDatos = new HashMap<>();	
+	
 	public VideoJuego save(VideoJuego videojuego) {
         baseDeDatos.put(videojuego.getId(),videojuego);
         return videojuego;
@@ -23,6 +35,7 @@ public class VideoJuegoRepository {
 	public void deleteById(String id) {
 		baseDeDatos.remove(id);
 	}
+	//Actualizar videojuego
 	public VideoJuego update(VideoJuego videojuego) {
         if (baseDeDatos.containsKey(videojuego.getId())) {
             baseDeDatos.put(videojuego.getId(), videojuego);
