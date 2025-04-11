@@ -1,17 +1,18 @@
 package com.example.Quantum_Zone_Backend.modelo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class Inventario {
 	private String id;
-	private Map<String, Consola> consolas;
-	private Map<String, VideoJuego> juegos;
-	private Map<String, Objeto> objetos;
-	private Map<String, Puesto> puestos;
+	private List< Consola> consolas;
+	private List< VideoJuego> juegos;
+	private List< Objeto> objetos;
+	private List< Puesto> puestos;
 	
-	public Inventario(Map<String, Consola> consolas, Map<String, VideoJuego> juegos, Map<String, Objeto> objetos,
-			Map<String, Puesto> puestos) {
+	public Inventario(List< Consola> consolas, List< VideoJuego> juegos, List< Objeto> objetos,
+			List< Puesto> puestos) {
 		this.id = UUID.randomUUID().toString();
 		this.consolas = consolas;
 		this.juegos = juegos;
@@ -26,35 +27,35 @@ public class Inventario {
 		this.id = id;
 	}
 
-	public Map<String, Consola> getConsolas() {
+	public List<Consola> getConsolas() {
 		return consolas;
 	}
 
-	public void setConsolas(Map<String, Consola> consolas) {
+	public void setConsolas(List<Consola> consolas) {
 		this.consolas = consolas;
 	}
 
-	public Map<String, VideoJuego> getJuegos() {
+	public List< VideoJuego> getJuegos() {
 		return juegos;
 	}
 
-	public void setJuegos(Map<String, VideoJuego> juegos) {
+	public void setJuegos(List< VideoJuego> juegos) {
 		this.juegos = juegos;
 	}
 
-	public Map<String, Objeto> getObjetos() {
+	public List< Objeto> getObjetos() {
 		return objetos;
 	}
 
-	public void setObjetos(Map<String, Objeto> objetos) {
+	public void setObjetos(List< Objeto> objetos) {
 		this.objetos = objetos;
 	}
 
-	public Map<String, Puesto> getPuestos() {
+	public List< Puesto> getPuestos() {
 		return puestos;
 	}
 
-	public void setPuestos(Map<String, Puesto> puestos) {
+	public void setPuestos(List< Puesto> puestos) {
 		this.puestos = puestos;
 	}
 	

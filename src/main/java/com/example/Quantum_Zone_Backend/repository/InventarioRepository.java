@@ -41,11 +41,13 @@ public class InventarioRepository {
 		return null;
 	}
 	//Buscar inventario por filtros
-	public List<Inventario> findByFilters(Map<String, Consola> consolas, Map<String, VideoJuego> juegos,
-			Map<String, Objeto> objetos, Map<String, Puesto> puestos) {
+	public List<Inventario> findByFilters(List<Consola> consolas,
+            List<VideoJuego> videoJuegos,
+            List<Objeto> objetos,
+            List<Puesto> puestos) {
 		return baseDeDatos.values().stream()
 				.filter(inventario -> consolas == null || inventario.getConsolas().equals(consolas))
-				.filter(inventario -> juegos == null || inventario.getJuegos().equals(juegos))
+				.filter(inventario -> videoJuegos == null || inventario.getJuegos().equals(videoJuegos))
 				.filter(inventario -> objetos == null || inventario.getObjetos().equals(objetos))
 				.filter(inventario -> puestos == null || inventario.getPuestos().equals(puestos))
 				.collect(Collectors.toList());
