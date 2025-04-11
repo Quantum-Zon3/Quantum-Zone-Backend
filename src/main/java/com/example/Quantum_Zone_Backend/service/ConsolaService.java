@@ -45,9 +45,11 @@ public class ConsolaService {
 	// eliminar una consola por id
 	public void deleteById(String id) {
 		consolaRepository.deleteById(id);
+		inventarioService.deleteConsola(id);
 	}
 	// actualizar una consola
 	public Consola update(Consola consola) {
+		inventarioService.updateConsola(consola);
 		return consolaRepository.update(consola);
 	}
 	// buscar consola por filtros

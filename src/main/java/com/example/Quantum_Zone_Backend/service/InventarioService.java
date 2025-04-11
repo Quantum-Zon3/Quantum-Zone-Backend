@@ -20,6 +20,7 @@ public class InventarioService {
 		Map<String, Objeto> objetos = new HashMap<>();
 		Map<String, Puesto> puestos = new HashMap<>();
 		this.inventario = new Inventario(consolas,juegos,objetos,puestos);
+		save(inventario);
 		
 		// Inicializamos algunos datos
 		initSampleData();
@@ -48,7 +49,42 @@ public class InventarioService {
 		puestos.put(puesto.getId(), puesto);
 		return puestos;
 	}
-	
+	public void deleteConsola(String id) {
+		Map<String, Consola> consolas = this.inventario.getConsolas();
+		consolas.remove(id);
+	}
+	public void deleteVideoJuego(String id) {
+		Map<String, VideoJuego> videoJuegos = this.inventario.getJuegos();
+		videoJuegos.remove(id);
+	}
+	public void deleteObjeto(String id) {
+		Map<String, Objeto> objetos = this.inventario.getObjetos();
+		objetos.remove(id);
+	}
+	public void deletePuesto(String id) {
+		Map<String, Puesto> puestos = this.inventario.getPuestos();
+		puestos.remove(id);
+	}
+	public Consola updateConsola(Consola consola) {
+		Map<String, Consola> consolas = this.inventario.getConsolas();
+		consolas.put(consola.getId(), consola);
+		return consola;
+	}
+	public VideoJuego updateVideoJuego(VideoJuego videojuego) {
+		Map<String, VideoJuego> videoJuegos = this.inventario.getJuegos();
+		videoJuegos.put(videojuego.getId(), videojuego);
+		return videojuego;
+	}
+	public Objeto updateObjeto(Objeto objeto) {
+		Map<String, Objeto> objetos = this.inventario.getObjetos();
+		objetos.put(objeto.getId(), objeto);
+		return objeto;
+	}
+	public Puesto updatePuesto(Puesto puesto) {
+		Map<String, Puesto> puestos = this.inventario.getPuestos();
+		puestos.put(puesto.getId(), puesto);
+		return puesto;
+	}
 	public Inventario save(Inventario inventario) {
 		return inventarioRepository.save(inventario);
 	}

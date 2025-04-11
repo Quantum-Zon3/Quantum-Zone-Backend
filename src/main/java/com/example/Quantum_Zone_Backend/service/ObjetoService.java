@@ -45,8 +45,10 @@ public class ObjetoService {
 	}
 	public void deleteById(String id) {
 		objetoRepository.deleteById(id);
+		inventarioService.deleteObjeto(id);
 	}
 	public Objeto update(Objeto objeto) {
+		inventarioService.updateObjeto(objeto);
 		return objetoRepository.update(objeto);
 	}
 	public List<Objeto> findByFilters(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {

@@ -46,10 +46,12 @@ public class VideoJuegoService {
 		}
 		// eliminar un videojuego por id
 		public void deleteById(String id) {
+			inventarioService.deleteVideoJuego(id);
 			videojuegoRepository.deleteById(id);
 		}
 		// actualizar un videojuego
 		public VideoJuego update(VideoJuego videojuego) {
+			inventarioService.updateVideoJuego(videojuego);
 			return videojuegoRepository.update(videojuego);
 		}
 		public List<VideoJuego> findByFilters(String nombre, LocalDate fechaDePubliacion, String descripcion, String publico, String tipo) {

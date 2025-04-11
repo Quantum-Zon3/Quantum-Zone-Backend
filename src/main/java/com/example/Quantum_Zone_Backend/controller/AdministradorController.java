@@ -109,7 +109,7 @@ public class AdministradorController {
 			@RequestParam(defaultValue = "0") @Parameter(description = "Edad del administrador") int edad)
 			 {
 		List<Administrador> administradoresFiltrados = administradorService.findByFilters(nombre, cedula, edad);
-		
+
 		// Verificar si la lista está vacía
 		if (administradoresFiltrados.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
