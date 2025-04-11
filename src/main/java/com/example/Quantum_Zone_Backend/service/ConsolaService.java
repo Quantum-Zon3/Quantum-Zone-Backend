@@ -56,5 +56,9 @@ public class ConsolaService {
 	public List<Consola> findByFilters(String marca, String consola, LocalDate fechaDePublicacion) {
 		return consolaRepository.findByFilters(marca, consola, fechaDePublicacion);
 	}
+	// buscar consola por nombre
+	public List<Consola> findByNombre(String nombre) {
+		return consolaRepository.findByNombre(nombre);
+	}
 
 }

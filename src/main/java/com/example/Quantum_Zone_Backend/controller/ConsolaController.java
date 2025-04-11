@@ -56,6 +56,19 @@ public class ConsolaController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	@GetMapping("/buscarPorNombre")
+	@Operation(summary = "Buscar consola por nombre", description = "Devuelve una lista de consolas que coinciden con el nombre proporcionado.")
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Consolas encontradas"),
+			@ApiResponse(responseCode = "404", description = "Consola no encontrada"),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
+	})
+	public ResponseEntity<List<Consola>> getConsolasByNombre(@RequestParam @Parameter(description = "Nombre de la consola") String nombre) {
+		List<Consola> consolas = consolaService.findByNombre(nombre);
+		if (consolas.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(consolas, HttpStatus.OK);
+	}
 	
 	@PostMapping
 	@Operation(summary = "Crear nueva consola", description = "Crea una nueva consola y la guarda en la base de datos.")
