@@ -106,11 +106,10 @@ public class InventarioController {
 	        @ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
 	public ResponseEntity<List<Inventario>> getInventariosByFilters(
-	        @RequestParam(required = false) @Parameter(description = "Consolas") Map<String, Consola> consolas,
-	        @RequestParam(required = false) @Parameter(description = "Video Juegos") Map<String, VideoJuego> videojuegos,
-	        @RequestParam(defaultValue = "0") @Parameter(description = "Objetos") Map<String, Objeto> objetos,
-	        @RequestParam(defaultValue = "0") @Parameter(description = "Puestos") Map<String, Puesto> puestos
-	        )
+			 @RequestParam(required = false) @Parameter(description = "IDs de consolas") List<Consola> consolas,
+		        @RequestParam(required = false) @Parameter(description = "IDs de videojuegos") List<VideoJuego> videojuegos,
+		        @RequestParam(required = false) @Parameter(description = "IDs de objetos") List<Objeto> objetos,
+		        @RequestParam(required = false) @Parameter(description = "IDs de puestos") List<Puesto> puestos)
 	{
 	    List<Inventario> inventariosFiltrados = inventarioService.findByFilters(consolas, videojuegos, objetos, puestos);
 
@@ -119,6 +118,49 @@ public class InventarioController {
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
 	    return new ResponseEntity<>(inventariosFiltrados, HttpStatus.OK);
+	}
+	@GetMapping("/consolas")
+	@Operation(summary = "Obtener consolas", description = "Devuelve una lista de todas las consolas registradas en el inventario.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200", description = "Lista de consolas obtenida con éxito"),
+	    @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+	})
+	public ResponseEntity<List<Consola>> getConsolas() {
+	    List<Consola> consolas = inventarioService.getConsolas();
+	    return new ResponseEntity<>(consolas, HttpStatus.OK);
+	}
+
+	@GetMapping("/videojuegos")
+	@Operation(summary = "Obtener videojuegos", description = "Devuelve una lista de todos los videojuegos registrados en el inventario.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200", description = "Lista de videojuegos obtenida con éxito"),
+	    @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+	})
+	public ResponseEntity<List<VideoJuego>> getVideoJuegos() {
+	    List<VideoJuego> videojuegos = inventarioService.getVideoJuegos();
+	    return new ResponseEntity<>(videojuegos, HttpStatus.OK);
+	}
+
+	@GetMapping("/objetos")
+	@Operation(summary = "Obtener objetos", description = "Devuelve una lista de todos los objetos registrados en el inventario.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200", description = "Lista de objetos obtenida con éxito"),
+	    @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+	})
+	public ResponseEntity<List<Objeto>> getObjetos() {
+	    List<Objeto> objetos = inventarioService.getObjetos();
+	    return new ResponseEntity<>(objetos, HttpStatus.OK);
+	}
+
+	@GetMapping("/puestos")
+	@Operation(summary = "Obtener puestos", description = "Devuelve una lista de todos los puestos registrados en el inventario.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200", description = "Lista de puestos obtenida con éxito"),
+	    @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+	})
+	public ResponseEntity<List<Puesto>> getPuestos() {
+	    List<Puesto> puestos = inventarioService.getPuestos();
+	    return new ResponseEntity<>(puestos, HttpStatus.OK);
 	}
 	
 }

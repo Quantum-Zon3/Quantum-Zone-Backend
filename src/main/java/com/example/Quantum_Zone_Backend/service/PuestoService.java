@@ -44,9 +44,11 @@ public class PuestoService {
 	// eliminar un puesto por id
 	public void deleteById(String id) {
 		puestoRepository.deleteById(id);
+		inventarioService.deletePuesto(id);
 	}
 	// actualizar un puesto
 	public Puesto update(Puesto puesto) {
+		inventarioService.updatePuesto(puesto);
 		return puestoRepository.update(puesto);
 	}
 	// buscar puesto por filtros

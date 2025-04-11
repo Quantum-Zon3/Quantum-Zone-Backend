@@ -43,6 +43,7 @@ public class VideojuegoRentadoService {
 						VideojuegoRentado videojuegoRentado = new VideojuegoRentado(clientes.get(0), videojuegos.get(0), LocalDate.now(), LocalDate.now().plusDays(2));
 						save(videojuegoRentado);
                     }
+
 		}
 
 	}

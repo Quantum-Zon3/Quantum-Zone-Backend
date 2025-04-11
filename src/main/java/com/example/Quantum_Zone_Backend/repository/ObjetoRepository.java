@@ -33,18 +33,19 @@ public class ObjetoRepository {
 	public Objeto update(Objeto objeto) {
 		if (baseDeDatos.containsKey(objeto.getId())) {
 			baseDeDatos.put(objeto.getId(), objeto);
+			return objeto;
 		}
 		return null;
 	}
 	//Buscar objeto por filtros
-	public List<Objeto> findByFilters (String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
-		return baseDeDatos.values().stream()
-				.filter(objeto -> nombre == null || objeto.getNombre().equalsIgnoreCase(nombre))
-				.filter(objeto -> categoria == null || objeto.getCategoria().equalsIgnoreCase(categoria))
-				.filter(objeto -> descripcion == null || objeto.getDescripcion().equalsIgnoreCase(descripcion))
-				.filter(objeto -> objeto.getFecha() == null || objeto.getFecha().equals(fecha))
-				.filter(objeto -> objeto.getEstado() == null || objeto.getEstado().equalsIgnoreCase(estado))
-				.collect(Collectors.toList());
-		
+	public List<Objeto> findByFilters(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
+	    return baseDeDatos.values().stream()
+	        .filter(objeto -> nombre == null || objeto.getNombre().equalsIgnoreCase(nombre))
+	        .filter(objeto -> categoria == null || objeto.getCategoria().equalsIgnoreCase(categoria))
+	        .filter(objeto -> descripcion == null || objeto.getDescripcion().equalsIgnoreCase(descripcion))
+	        .filter(objeto -> fecha == null || objeto.getFecha() != null && objeto.getFecha().equals(fecha))
+	        .filter(objeto -> estado == null || objeto.getEstado() != null && objeto.getEstado().equalsIgnoreCase(estado))
+	        .collect(Collectors.toList());
 	}
+
 }

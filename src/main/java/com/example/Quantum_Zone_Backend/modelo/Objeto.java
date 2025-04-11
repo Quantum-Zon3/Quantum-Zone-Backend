@@ -16,7 +16,7 @@ public class Objeto {
     private String descripcion;
     private LocalDate fecha;
     private String estado;
-    private String Categoria;
+    private String categoria;
 
     public Objeto(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
 		this.id = UUID.randomUUID().toString();
@@ -24,7 +24,7 @@ public class Objeto {
 		this.descripcion = descripcion;
 		this.fecha = fecha;
 		this.estado = estado;
-		Categoria = categoria;
+		this.categoria = categoria;
     }
 
 	public String getId() {
@@ -68,18 +68,18 @@ public class Objeto {
 	}
 
 	public String getCategoria() {
-		return Categoria;
+		return this.categoria;
 	}
 
 	public void setCategoria(String categoria) {
-		Categoria = categoria;
+		this.categoria = categoria;
 	}
 	
 
 	@Override
 	public String toString() {
 		return "Objeto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fecha=" + fecha
-				+ ", estado=" + estado + ", Categoria=" + Categoria + "]";
+				+ ", estado=" + estado + ", Categoria=" + categoria + "]";
 	}
     
     
