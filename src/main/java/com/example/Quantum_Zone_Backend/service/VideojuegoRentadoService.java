@@ -40,7 +40,7 @@ public class VideojuegoRentadoService {
 		for (int i = 0; i <clientes.size() ; i++) {
                     for(int j=0; j<videojuegos.size(); j++){
                     	
-						VideojuegoRentado videojuegoRentado = new VideojuegoRentado(clientes.get(0), videojuegos.get(0), LocalDate.now(), LocalDate.now().plusDays(2));
+						VideojuegoRentado videojuegoRentado = new VideojuegoRentado(clientes.get(i), videojuegos.get(j), LocalDate.now(), LocalDate.now().plusDays(2));
 						save(videojuegoRentado);
                     }
 
