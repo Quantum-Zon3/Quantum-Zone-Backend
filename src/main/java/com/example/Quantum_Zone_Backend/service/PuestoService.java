@@ -21,10 +21,12 @@ public class PuestoService {
 	}
 	private void initSampleData() {
 		List<Consola> consolas = consolaService.findAll();
-		for (int i = 0; i <consolas.size() ; i++) {
-			Puesto puesto = new Puesto("Puesto "+ i, consolas.get(i), 4, 2);
+			Puesto puesto = new Puesto("Puesto " + 1, consolas.get(0), 2, 2);
+			Puesto puesto2 = new Puesto("Puesto " + 2, consolas.get(1), 2, 2);
+			Puesto puesto3 = new Puesto("Puesto " + 3, consolas.get(2), 2, 2);
+			save(puesto2);
+			save(puesto3);
 			save(puesto);
-		}
 		
 		
 	}
