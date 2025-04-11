@@ -121,11 +121,11 @@ public class VideojuegoRentadoController {
 	})
 	public ResponseEntity<List<VideojuegoRentado>> filterVideojuegosRentados(
 			@RequestParam(required = false) String id,
-			@RequestParam(required = false) Cliente cliente,
+			@RequestParam(required = false) String cedula,
 			@RequestParam(required = false) VideoJuego videojuego,
 			@RequestParam(required = false) LocalDate fechaInicio,
 			@RequestParam(required = false) LocalDate fechaFin) {
-		List<VideojuegoRentado> videojuegosRentados = videojuegoRentadoService.findByFilters(id, cliente, videojuego, fechaInicio, fechaFin);
+		List<VideojuegoRentado> videojuegosRentados = videojuegoRentadoService.findByFilters(id, cedula, videojuego, fechaInicio, fechaFin);
 		return new ResponseEntity<>(videojuegosRentados, HttpStatus.OK);
 	}
 	

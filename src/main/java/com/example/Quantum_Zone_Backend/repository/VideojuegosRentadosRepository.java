@@ -33,12 +33,12 @@ public class VideojuegosRentadosRepository {
 		}
 		return null;
 	}
-	public List<VideojuegoRentado> findByFilters(String id, LocalDate fechaInicio,LocalDate fechaFinal,Cliente cliente,VideoJuego videojuego) {
+	public List<VideojuegoRentado> findByFilters(String id, LocalDate fechaInicio,LocalDate fechaFinal,String cedula,VideoJuego videojuego) {
 		return baseDeDatos.values().stream()
 				.filter(videojuegoRentado -> id == null || videojuegoRentado.getId().equals(id))
 				.filter(videojuegoRentado -> fechaInicio == null || videojuegoRentado.getFechaAlquiler().equals(fechaInicio))
 				.filter(videojuegoRentado -> fechaFinal == null || videojuegoRentado.getFechaDevolucion().equals(fechaFinal))
-				.filter(videojuegoRentado -> cliente == null || videojuegoRentado.getCliente().equals(cliente))
+				.filter(videojuegoRentado -> cedula == null || videojuegoRentado.getCliente().getCedula().equals(cedula))
 				.filter(videojuegoRentado -> videojuego == null || videojuegoRentado.getVideojuego().equals(videojuego))
 				.collect(Collectors.toList());
 	}
