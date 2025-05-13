@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.util.List;
 import com.example.Quantum_Zone_Backend.repository.ClienteRepository;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ClienteService {
 		return clienteRepository.save(cliente);
 	}
 	// encontrar un cliente por id
-	public Cliente findById(String id) {
+	public Optional<Cliente> findById(Integer id) {
 		return clienteRepository.findById(id);
 	}
 	// listar todos los clientes
@@ -33,16 +34,16 @@ public class ClienteService {
 		return clienteRepository.findAll();
 	}
 	// eliminar un cliente por id
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		clienteRepository.deleteById(id);
 	}
 	// actualizar un cliente
-	public Cliente update(Cliente cliente) {
-		return clienteRepository.update(cliente);
+	public Optional<Cliente> update(Integer id, Cliente cliente) {
+		return clienteRepository.update(id, cliente);
 	}
 	// buscar cliente por filtros
-	public List<Cliente> findByFilters(String nombre, int edad, String direccion, String imagen, String cedula , String telefono, LocalDate fechaRegistro, String email) {
-		return clienteRepository.findByFilters(nombre, edad, direccion, imagen, cedula, telefono, fechaRegistro, email);
+	public Optional<List<Cliente>> findByFilters(String cedula) {
+		return clienteRepository.findByFilters(cedula);
 	}
 
 }

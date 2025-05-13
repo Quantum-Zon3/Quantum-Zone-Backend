@@ -1,6 +1,7 @@
 package com.example.Quantum_Zone_Backend.service;
 import com.example.Quantum_Zone_Backend.repository.AdministradorRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class AdministradorService {
 		return administradorRepository.save(administrador);
 	}
 	// encontrar un administrador por id
-	public Administrador findById(String id) {
+	public Optional<Administrador> findById(Integer id) {
 		return administradorRepository.findById(id);
 	}
 	// listar todos los administradores
@@ -31,16 +32,16 @@ public class AdministradorService {
 		return administradorRepository.findAll();
 	}
 	// eliminar un administrador por id
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		administradorRepository.deleteById(id);
 	}
 	// actualizar un administrador
-	public Administrador update(Administrador administrador) {
+	public Optional<Administrador> update(Integer id, Administrador administrador) {
 		administrador.setContraseña(passwordEncoder.encode(administrador.getContraseña()));
-		return administradorRepository.update(administrador);
+		return administradorRepository.update(id, administrador);
 	}
 	// buscar administrador por filtros
-	public List<Administrador> findByFilters(String nombre, String cedula, int edad) {
-		return administradorRepository.findByFilters(nombre, cedula, edad);
+	public Optional<List<Administrador>> findByFilters(String nombre) {
+		return administradorRepository.findByFilters(nombre);
 	}	
 }

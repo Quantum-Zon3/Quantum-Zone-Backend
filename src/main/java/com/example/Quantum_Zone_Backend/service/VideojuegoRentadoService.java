@@ -8,6 +8,8 @@ import com.example.Quantum_Zone_Backend.modelo.Cliente;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
@@ -34,7 +36,7 @@ public class VideojuegoRentadoService {
 
 	
 	// encontrar un puesto por id
-	public VideojuegoRentado findById(String id) {
+	public Optional<VideojuegoRentado> findById(Integer id) {
 		return videojuegoRRepository.findById(id);
 	}
 
@@ -44,19 +46,18 @@ public class VideojuegoRentadoService {
 	}
 
 	// eliminar un puesto por id
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		videojuegoRRepository.deleteById(id);
 	}
 
 	// actualizar un puesto
-	public VideojuegoRentado update(VideojuegoRentado videojuegoR) {
-		return videojuegoRRepository.update(videojuegoR);
+	public Optional<VideojuegoRentado> update(Integer id,VideojuegoRentado videojuegoR) {
+		return videojuegoRRepository.update(id,videojuegoR);
 	}
 
 	// buscar puesto por filtros
-	public List<VideojuegoRentado> findByFilters(String id, String cedula, VideoJuego videojuego,
-			LocalDate fechaDeRenta, LocalDate fechaDeDevolucion) {
-		return videojuegoRRepository.findByFilters(id, fechaDeRenta, fechaDeDevolucion, cedula, videojuego);
+	public Optional<List<VideojuegoRentado>> findByFilters(Integer idVideojuego) {
+		return videojuegoRRepository.findByFilters(idVideojuego);
 	}
 
 	public VideojuegoRentado save(VideojuegoRentado videojuegoR) {

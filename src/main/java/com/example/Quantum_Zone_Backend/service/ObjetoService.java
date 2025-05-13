@@ -2,6 +2,8 @@ package com.example.Quantum_Zone_Backend.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.repository.ObjetoRepository;
@@ -19,19 +21,19 @@ public class ObjetoService {
 	public Objeto save(Objeto objeto) {
 		return objetoRepository.save(objeto);
 	}
-	public Objeto findById(String id) {
+	public Optional<Objeto> findById(Integer id) {
 		return objetoRepository.findById(id);
 	}
 	public List<Objeto> findAll() {
 		return objetoRepository.findAll();
 	}
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		objetoRepository.deleteById(id);	
 	}
-	public Objeto update(Objeto objeto) {
-		return objetoRepository.update(objeto);
+	public Optional<Objeto> update(Integer id,Objeto objeto) {
+		return objetoRepository.update(id,objeto);
 	}
-	public List<Objeto> findByFilters(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
-		return objetoRepository.findByFilters(nombre, descripcion, fecha, estado, categoria);
+	public Optional<List<Objeto>> findByFilters(String nombre) {
+		return objetoRepository.findByFilters(nombre);
 	}
 }
