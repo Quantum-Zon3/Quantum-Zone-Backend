@@ -3,36 +3,44 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.Quantum_Zone_Backend.modelo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 import java.time.LocalDate;
 /**
  *
  * @author shadow111285
  */
+@Entity
+@Table(name = "clientes")
 public class Cliente {
-	private String id;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+	@Column(nullable = false)
     private String nombre;
+	@Column(nullable = false)
     private int edad;
+	@Column(nullable = false)
     private String direccion;
+	@Column(nullable = false)
     private String imagen;
+	@Column(nullable = false)
     private String cedula;
+	@Column(nullable = false)
     private String telefono;
+	@Column(nullable = false)
     private LocalDate fechaRegistro;
+	@Column(nullable = false)
     private String email;
 
-    public Cliente(String nombre, int edad, String direccion, String imagen,String cedula, String telefono, LocalDate fechaRegistro, String email) {
-    	this.id = UUID.randomUUID().toString();
-    	this.nombre = nombre;
-        this.edad = edad;
-        this.direccion = direccion;
-        this.imagen = imagen;
-        this.cedula = cedula;
-        this.telefono = telefono;
-        this.fechaRegistro = fechaRegistro;
-        this.email = email;
-    }
+    
     public Cliente() {
-		this.id = UUID.randomUUID().toString();
+		
 	}
 
     public String getNombre() {
@@ -98,10 +106,10 @@ public class Cliente {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getId() {
+    public Integer getId() {
     	return id;
     }
-    public void setId(String id) {
+    public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -3,26 +3,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.Quantum_Zone_Backend.modelo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 /**
  *
  * @author shadow111285
  */
+@Entity
+@Table(name = "consolas")
 public class Consola {
-	private String id;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+	@Column(nullable = false)
     private String marca;
+	@Column(nullable = false)
     private String consola;
+	@Column(nullable = false)
     private LocalDate fechaDePublicacion;
 
-    public Consola(String marca, String consola, LocalDate fechaDePublicacion) {
-    	this.id = UUID.randomUUID().toString();
-        this.marca = marca;
-        this.consola = consola;
-        this.fechaDePublicacion = fechaDePublicacion;
-    }
+
     public Consola() {
-		this.id = UUID.randomUUID().toString();
 	}
 
     public String getMarca() {
@@ -48,10 +55,10 @@ public class Consola {
     public void setFechaDePublicacion(LocalDate fechaDePublicacion) {
         this.fechaDePublicacion = fechaDePublicacion;
     }
-    public String getId() {
+    public Integer getId() {
 		return id;
 	}
-    	public void setId(String id) {
+    	public void setId(Integer id) {
 		this.id = id;
 	}
 	@Override
