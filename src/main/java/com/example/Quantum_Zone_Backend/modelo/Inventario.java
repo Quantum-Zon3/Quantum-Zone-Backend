@@ -1,29 +1,36 @@
 package com.example.Quantum_Zone_Backend.modelo;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Entity
+@Table(name = "inventario")
 public class Inventario {
-	private String id;
-	private List< Consola> consolas;
-	private List< VideoJuego> juegos;
-	private List< Objeto> objetos;
-	private List< Puesto> puestos;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(nullable = false)
+	private List<Consola> consolas;
+	@Column(nullable = false)
+	private List<VideoJuego> juegos;
+	@Column(nullable = false)
+	private List<Objeto> objetos;
+	@Column(nullable = false)
+	private List<Puesto> puestos;
 	
-	public Inventario(List< Consola> consolas, List< VideoJuego> juegos, List< Objeto> objetos,
-			List< Puesto> puestos) {
-		this.id = UUID.randomUUID().toString();
-		this.consolas = consolas;
-		this.juegos = juegos;
-		this.objetos = objetos;
-		this.puestos = puestos;
+	public Inventario() {
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.Quantum_Zone_Backend.modelo;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,21 +16,25 @@ import java.util.UUID;
  *
  * @author shadow111285
  */
+@Entity
+@Table(name = "videojuegos")
 public class VideoJuego {
-	private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(nullable = false)
 	private String nombre;
-	private LocalDate fechaDePubliacion;
+	@Column(nullable = false)
+	private LocalDate fechaDePubliacion = LocalDate.now();
+	@Column(nullable = false)
 	private String descripcion;
+	@Column(nullable = false)
 	private String publico;
+	@Column(nullable = false)
 	private String tipo;
 
-	public VideoJuego(String nombre, LocalDate fechaDePubliacion, String descripcion, String publico, String tipo) {
-		this.id = UUID.randomUUID().toString();
-		this.nombre = nombre;
-		this.fechaDePubliacion = fechaDePubliacion;
-		this.descripcion = descripcion;
-		this.publico = publico;
-		this.tipo = tipo;
+	public VideoJuego() {
+		
 	}
 
 	public String getNombre() {
@@ -68,10 +77,10 @@ public class VideoJuego {
 		this.tipo = tipo;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
