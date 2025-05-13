@@ -30,24 +30,9 @@ public class VideojuegoRentadoService {
 		this.videojuegoRRepository = videojuegoRRepository;
 		this.videojuegoService = videojuegoService;
 		this.clienteService = clienteService;
-		// Inicializamos algunos datos
-		initSampleData();
 	}
 
-	private void initSampleData() {
-		List<Cliente> clientes = clienteService.findAll();
-                List<VideoJuego> videojuegos = videojuegoService.findAll();
-		for (int i = 0; i <clientes.size() ; i++) {
-                    for(int j=0; j<videojuegos.size(); j++){
-                    	
-						VideojuegoRentado videojuegoRentado = new VideojuegoRentado(clientes.get(i), videojuegos.get(j), LocalDate.now(), LocalDate.now().plusDays(2));
-						save(videojuegoRentado);
-                    }
-
-		}
-
-	}
-
+	
 	// encontrar un puesto por id
 	public VideojuegoRentado findById(String id) {
 		return videojuegoRRepository.findById(id);
