@@ -39,7 +39,7 @@ public class PuestoService {
 		return puestoRepository.update(id, puesto);
 	}
 	// buscar puesto por filtros
-	public List<Puesto> findByFilters(String numeroDePuesto) {
+	public Optional<List<Puesto>> findByFilters(String numeroDePuesto) {
 		return puestoRepository.findByFilters(numeroDePuesto);
 	}
 	

@@ -41,9 +41,4 @@ public class ConsolaService {
 	public Optional<List<Consola>> findByFilters(String consola) {
 		return consolaRepository.findByFilters(consola);
 	}
-	// buscar consola por nombre
-	public List<Consola> findByNombre(String nombre) {
-		return consolaRepository.findByNombre(nombre);
-	}
-
 }

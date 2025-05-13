@@ -33,7 +33,7 @@ public class ObjetoService {
 	public Optional<Objeto> update(Integer id,Objeto objeto) {
 		return objetoRepository.update(id,objeto);
 	}
-	public Optional<List<Objeto>> findByFilters(String nombre, String descripcion, LocalDate fecha, String estado, String categoria) {
-		return objetoRepository.findByFilters(nombre, descripcion, fecha, estado, categoria);
+	public Optional<List<Objeto>> findByFilters(String nombre) {
+		return objetoRepository.findByFilters(nombre);
 	}
 }
