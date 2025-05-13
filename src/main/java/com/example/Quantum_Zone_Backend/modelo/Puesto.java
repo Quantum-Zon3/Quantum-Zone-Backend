@@ -1,25 +1,32 @@
-
-
 package com.example.Quantum_Zone_Backend.modelo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 /**
  *
  * @author shadow111285
  */
+@Entity
+@Table(name = "puestos")
 public class Puesto {
-	private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(nullable = false)
     private String numeroDePuesto;
-    private Consola consola;
+	@Column(name = "idConsola" ,nullable = false)
+    private Integer idConsola;
+	@Column(nullable = false)
     private int cantidadDeSillas;
+	@Column(nullable = false)
     private int canditadDeControles;
     
 
-    public Puesto(String numeroDePuesto, Consola consola, int cantidadDeSillas, int cantidadDeControles) {
-    	this.id = UUID.randomUUID().toString();
-        this.numeroDePuesto = numeroDePuesto;
-        this.consola = consola;
-        this.cantidadDeSillas = cantidadDeSillas;
-        this.canditadDeControles = cantidadDeControles;
+    public Puesto() {
     }
 
     public String getNumeroDePuesto() {
@@ -30,12 +37,12 @@ public class Puesto {
         this.numeroDePuesto = numeroDePuesto;
     }
 
-    public Consola getConsola() {
-        return consola;
+    public Integer getIdConsola() {
+        return idConsola;
     }
 
-    public void setConsola(Consola consola) {
-        this.consola = consola;
+    public void setIdConsola(Integer idConsola) {
+        this.idConsola = idConsola;
     }
 
     public int getCantidadDeSillas() {
@@ -53,16 +60,16 @@ public class Puesto {
     public void setCanditadDeControles(int canditadDeControles) {
         this.canditadDeControles = canditadDeControles;
     }
-    public String getId() {
+    public Integer getId() {
     		return id;
     }
-    public void setId(String id) {
+    public void setId(Integer id) {
 			this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return "Puesto [id=" + id + ", numeroDePuesto=" + numeroDePuesto + ", consola=" + consola
+		return "Puesto [id=" + id + ", numeroDePuesto=" + numeroDePuesto + ", consola=" + idConsola
 				+ ", cantidadDeSillas=" + cantidadDeSillas + ", canditadDeControles=" + canditadDeControles + "]";
 	}
     

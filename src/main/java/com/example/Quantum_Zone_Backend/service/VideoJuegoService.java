@@ -9,27 +9,13 @@ import com.example.Quantum_Zone_Backend.repository.VideoJuegoRepository;
 @Service
 public class VideoJuegoService {
 	private final VideoJuegoRepository videojuegoRepository;
-	private final InventarioService inventarioService;
 	
 	@Autowired
-	public VideoJuegoService(VideoJuegoRepository videojuegoRepository ,InventarioService inventarioService) {
+	public VideoJuegoService(VideoJuegoRepository videojuegoRepository) {
 		this.videojuegoRepository = videojuegoRepository;
-		this.inventarioService = inventarioService;
-		// Inicializamos algunos datos
-		initSampleData();
-	}
-		private void initSampleData() {
-		// Crear videojuegos
-			VideoJuego videojuego1 = new VideoJuego("The Last of Us Part II", LocalDate.now(), "Un juego de acción y aventura", "Adultos", "Acción/Aventura");
-		    VideoJuego videojuego2 = new VideoJuego("God of War", LocalDate.now(), "Un juego de acción y aventura mitológica", "Adultos", "Acción/Aventura");
-		    VideoJuego videojuego3 = new VideoJuego("Halo Infinite", LocalDate.now(), "Un juego de disparos en primera persona", "Adolescentes", "Disparos en primera persona");
-		
-		// Guardar videojuegos en la base de datos
-		save(videojuego1);
-		save(videojuego2);
-		save(videojuego3);
 		
 	}
+		
 		// guardar un videojuego
 		public VideoJuego save(VideoJuego videojuego) {
 			return videojuegoRepository.save(videojuego);
@@ -45,12 +31,10 @@ public class VideoJuegoService {
 		}
 		// eliminar un videojuego por id
 		public void deleteById(String id) {
-			inventarioService.deleteVideoJuego(id);
 			videojuegoRepository.deleteById(id);
 		}
 		// actualizar un videojuego
 		public VideoJuego update(VideoJuego videojuego) {
-			inventarioService.updateVideoJuego(videojuego);
 			return videojuegoRepository.update(videojuego);
 		}
 		public List<VideoJuego> findByFilters(String nombre, LocalDate fechaDePubliacion, String descripcion, String publico, String tipo) {

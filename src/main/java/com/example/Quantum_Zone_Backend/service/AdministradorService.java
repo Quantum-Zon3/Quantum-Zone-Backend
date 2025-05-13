@@ -12,19 +12,8 @@ public class AdministradorService {
 	@Autowired
 	public AdministradorService(AdministradorRepository administradorRepository) {
 		this.administradorRepository = administradorRepository;
-		//Inicializamos algunos datos
-		initSampleData();
 	}
-	private void initSampleData() {
-		// Crear Administradores
-		Administrador carlosLopez = new Administrador("Carlos Andres Lopez Perez", "1234", 19, "1115574807");
-		Administrador miguelAngel = new Administrador("Miguel Angel Lievano Buitrago ", "1234", 18, "1107843533");
-		Administrador carlosMario = new Administrador("Carlos Mario Patino Ramirez", "1234", 18, "1094897822");
-		// Guardar adminstradores en la base de datos
-		save(carlosLopez);
-		save(miguelAngel);
-		save(carlosMario);	
-	}
+	
 	// guardar un administrador
 	public Administrador save(Administrador administrador) {
 		return administradorRepository.save(administrador);

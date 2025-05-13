@@ -9,29 +9,15 @@ import com.example.Quantum_Zone_Backend.modelo.Consola;
 @Service
 public class ConsolaService {
 	private final ConsolaRepository consolaRepository;
-	private final InventarioService inventarioService;
+	
 	@Autowired
-	public ConsolaService(ConsolaRepository consolaRepository,InventarioService inventarioService) {
+	public ConsolaService(ConsolaRepository consolaRepository) {
 		this.consolaRepository = consolaRepository;
-		this.inventarioService = inventarioService;
-		// Inicializamos algunos datos
-		initSampleData();
-	}
-	private void initSampleData() {
-		// Crear Consolas
-		Consola consola1 = new Consola("Sony", "PlayStation 5", LocalDate.now());
-		Consola consola2 = new Consola("Microsoft", "Xbox Series X", LocalDate.now());
-		Consola consola3 = new Consola("Nintendo", "Nintendo Switch", LocalDate.now());
-		
-		// Guardar consolas en la base de datos
-		save(consola1);
-		save(consola2);
-		save(consola3);
 		
 	}
+
 	// guardar una consola
 	public Consola save(Consola consola) {
-		inventarioService.saveConsola(consola);
 		return consolaRepository.save(consola);
 	}
 	// encontrar una consola por id
@@ -45,11 +31,9 @@ public class ConsolaService {
 	// eliminar una consola por id
 	public void deleteById(String id) {
 		consolaRepository.deleteById(id);
-		inventarioService.deleteConsola(id);
 	}
 	// actualizar una consola
 	public Consola update(Consola consola) {
-		inventarioService.updateConsola(consola);
 		return consolaRepository.update(consola);
 	}
 	// buscar consola por filtros
