@@ -1,56 +1,69 @@
 package com.example.Quantum_Zone_Backend.repository;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-
 import com.example.Quantum_Zone_Backend.modelo.Consola;
 import java.time.LocalDate;
 
 @Repository
 public class ConsolaRepository {
-	 private final Map<String, Consola> baseDeDatos = new HashMap<>();
+	 @PersistenceContext
+	 private EntityManager entityManager;
 	 //Guardar consola
+	 @Transactional
 	 public Consola save(Consola consola) {
-	        baseDeDatos.put(consola.getId(), consola);
-	        
+	 		 entityManager.persist(consola);
 	        return consola;
 	    }
 	 //Buscar consola
-	 public List<Consola> findAll() {
-	        return new ArrayList<>(baseDeDatos.values());
-	    }
+	 @Transactional
+	 public List<Consola> findAll() { 
+		 Query query = entityManager.createNativeQuery("SELECT * FROM Consola ", Consola.class);
+		 return query.getResultList();
+	 }
 	 //Buscar consola por id
-	 public Consola findById(String id) {
-	        return baseDeDatos.get(id);
+	 @Transactional
+	 public Optional<Consola> findById(Integer id) {
+		 Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE id = :id", Consola.class);
+		 query.setParameter("id", id);
+		 try {
+			 Consola consola = (Consola) query.getSingleResult();
+			 return Optional.of(consola);
+		 } catch (Exception e) {
+			 return Optional.empty();
+		 }
 	    }
 	 //Eliminar consola por id
-	 public void deleteById(String id) {
-		 baseDeDatos.remove(id);
+	 @Transactional
+	 public boolean deleteById(Integer id) {
+		 Query query = entityManager.createNativeQuery("DELETE FROM Consola WHERE id = :id");
+		 query.setParameter("id", id);
+		 int delete = query.executeUpdate();
+		 return delete > 0;
 	 }
 	 //Actualizar consola
-	 public Consola update(Consola consola) {
-	        if (baseDeDatos.containsKey(consola.getId())) {
-	            baseDeDatos.put(consola.getId(), consola);
-	            return consola;
+	 @Transactional
+	 public Optional<Consola> update(Integer id,Consola consola) {
+	    Query query = entityManager.createNativeQuery("UPDATE Consola SET marca = :marca, consola = :consola, fechaDePublicacion = :fechaDePublicacion WHERE id = :id");
+	    query.setParameter("marca", consola.getMarca());
+	    query.setParameter("consola", consola.getConsola());
+	    query.setParameter("fechaDePublicacion", consola.getFechaDePublicacion());
+	    query.setParameter("id", id);
+	    int update = query.executeUpdate();
+	    if (update > 0) {
+	        return findById(id);
+	    } else {
+	        return Optional.empty();
 	        }
-	        return null;
 	    }
 	 //Buscar consola por filtros
-	 public List<Consola> findByFilters(String marca, String consola, LocalDate fechaDePublicacion) {
-		 return baseDeDatos.values().stream()
-				 .filter(consola1 -> marca == null || consola1.getMarca().equalsIgnoreCase(marca))
-				 .filter(consola1 -> consola == null || consola1.getConsola().equalsIgnoreCase(consola))
-				 .filter(consola1 -> fechaDePublicacion == null || consola1.getFechaDePublicacion().equals(fechaDePublicacion))
-				 .collect(Collectors.toList());
-		 
-	 }
 	 public List<Consola> findByNombre(String nombre) {
-	        return baseDeDatos.values().stream()
-	                .filter(consola -> nombre == null || consola.getConsola().equalsIgnoreCase(nombre))
-	                .collect(Collectors.toList());
+	    Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE marca LIKE :nombre", Consola.class);
+	    query.setParameter("nombre", nombre);
+	    return query.getResultList();
 	    }
 }

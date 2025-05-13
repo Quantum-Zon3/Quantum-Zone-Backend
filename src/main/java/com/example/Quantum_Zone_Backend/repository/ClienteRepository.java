@@ -26,7 +26,7 @@ public class ClienteRepository {
 	}
 	//Buscar cliente por id
 	@Transactional
-	public Optional<Cliente> findById(String id) {
+	public Optional<Cliente> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Cliente WHERE id = :id", Cliente.class);
 		query.setParameter("id", id);
 		try {
@@ -37,14 +37,14 @@ public class ClienteRepository {
 		}
 	}
 	//Eliminar cliente por id
-	public boolean deleteById(String id) {
+	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM Cliente WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
 	}
 	//Actualizar cliente
-	public Optional<Cliente>update(String id,Cliente cliente) {
+	public Optional<Cliente>update(Integer id,Cliente cliente) {
 		Query query = entityManager.createNativeQuery("UPDATE Cliente SET nombre = :nombre, edad = :edad, direccion = :direccion, imagen = :imagen, cedula = :cedula, telefono = :telefono, fechaRegistro = :fechaRegistro, email = :email WHERE id = :id");
 		query.setParameter("nombre", cliente.getNombre());
 		query.setParameter("edad", cliente.getEdad());
@@ -65,7 +65,7 @@ public class ClienteRepository {
 	//Buscar cliente por filtros
 	public List<Cliente> findByFilters(String nombre) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Cliente WHERE nombre LIKE :nombre", Cliente.class);
-		query.setParameter("nombre", "%" + nombre + "%");
+		query.setParameter("nombre", nombre );
 		return query.getResultList();
 	}
 }

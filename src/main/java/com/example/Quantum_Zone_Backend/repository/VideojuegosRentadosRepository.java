@@ -1,9 +1,11 @@
 package com.example.Quantum_Zone_Backend.repository;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.Quantum_Zone_Backend.modelo.Cliente;
@@ -12,34 +14,51 @@ import com.example.Quantum_Zone_Backend.modelo.VideojuegoRentado;
 import java.time.LocalDate;
 @Repository
 public class VideojuegosRentadosRepository {
-	private final Map<String, VideojuegoRentado> baseDeDatos = new HashMap<>();
+	@PersistenceContext
+	private EntityManager entityManager;
+	//Guardar videojuego
+	@Transactional
 	public VideojuegoRentado save(VideojuegoRentado videojuegoRentado) {
-		baseDeDatos.put(videojuegoRentado.getId(),videojuegoRentado);
+		entityManager.persist(videojuegoRentado);
 		return videojuegoRentado;
 	}
 	public List<VideojuegoRentado> findAll() {
-	    return new ArrayList<>(baseDeDatos.values());
+		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado", VideojuegoRentado.class);
+		return query.getResultList();
 	}
-	public VideojuegoRentado findById(String id) {
-		return baseDeDatos.get(id);
-	}
-	public void deleteById(String id) {
-		baseDeDatos.remove(id);
-	}
-	public VideojuegoRentado update(VideojuegoRentado videojuegoRentado) {
-		if (baseDeDatos.containsKey(videojuegoRentado.getId())) {
-			baseDeDatos.put(videojuegoRentado.getId(), videojuegoRentado);
-			return videojuegoRentado;
+	public Optional<VideojuegoRentado> findById(Integer id) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE id = :id", VideojuegoRentado.class);
+		query.setParameter("id", id);
+		try {
+			VideojuegoRentado videojuegoRentado = (VideojuegoRentado) query.getSingleResult();
+			return Optional.of(videojuegoRentado);
+		} catch (Exception e) {
+			return Optional.empty();
 		}
-		return null;
 	}
-	public List<VideojuegoRentado> findByFilters(String id, LocalDate fechaInicio,LocalDate fechaFinal,String cedula,VideoJuego videojuego) {
-		return baseDeDatos.values().stream()
-				.filter(videojuegoRentado -> id == null || videojuegoRentado.getId().equals(id))
-				.filter(videojuegoRentado -> fechaInicio == null || videojuegoRentado.getFechaAlquiler().equals(fechaInicio))
-				.filter(videojuegoRentado -> fechaFinal == null || videojuegoRentado.getFechaDevolucion().equals(fechaFinal))
-				.filter(videojuegoRentado -> cedula == null || videojuegoRentado.getCliente().getCedula().equals(cedula))
-				.filter(videojuegoRentado -> videojuego == null || videojuegoRentado.getVideojuego().equals(videojuego))
-				.collect(Collectors.toList());
+	public boolean deleteById(Integer id) {
+		Query query = entityManager.createNativeQuery("DELETE FROM VideojuegoRentado WHERE id = :id");
+		query.setParameter("id", id);
+		int delete = query.executeUpdate();
+		return delete > 0;
+	}
+	public Optional<VideojuegoRentado> update(Integer id,VideojuegoRentado videojuegoRentado) {
+		Query query = entityManager.createNativeQuery("UPDATE VideojuegoRentado SET idCliente = :idCliente, idVideojuego = :idVvideojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
+		query.setParameter("idCliente", videojuegoRentado.getIdCliente());
+		query.setParameter("idVideojuego", videojuegoRentado.getIdVideojuego());
+		query.setParameter("fechaAlquiler", videojuegoRentado.getFechaAlquiler());
+		query.setParameter("fechaDevolucion", videojuegoRentado.getFechaDevolucion());
+		query.setParameter("id", id);
+		int update = query.executeUpdate();
+		if (update > 0) {
+			return findById(id);
+		} else {
+			return Optional.empty();
+		}
+	}
+	public List<VideojuegoRentado> findByFilters(VideoJuego videojuego) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE videojuego = :videojuego", VideojuegoRentado.class);
+		query.setParameter("videojuego", videojuego);
+		return query.getResultList();
 	}
 }
