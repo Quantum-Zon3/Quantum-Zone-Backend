@@ -1,13 +1,14 @@
 package com.example.Quantum_Zone_Backend.repository;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
-import java.time.LocalDate;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 @Repository
 public class VideoJuegoRepository {
 	private boolean initialized = false;
@@ -19,37 +20,56 @@ public class VideoJuegoRepository {
             initialized = true;
         }
     }
-    	// Simulando una base de datos en memoria
-	private final Map<String, VideoJuego> baseDeDatos = new HashMap<>();	
-	
+    @PersistenceContext
+    private EntityManager entityManager;
+	@Transactional
 	public VideoJuego save(VideoJuego videojuego) {
-        baseDeDatos.put(videojuego.getId(),videojuego);
+        entityManager.persist(videojuego);
         return videojuego;
     }
+	@Transactional
 	public List<VideoJuego> findAll() {
-	    return new ArrayList<>(baseDeDatos.values());
+	    Query query = entityManager.createNativeQuery("SELECT * FROM VideoJuego", VideoJuego.class);
+	    return query.getResultList();
 	}
-	public VideoJuego findById(String id) {
-        return baseDeDatos.get(id);
+	@Transactional
+	public Optional<VideoJuego> findById(String id) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM VideoJuego WHERE id = :id", VideoJuego.class);
+        query.setParameter("id", id);
+        try {
+			VideoJuego videojuego = (VideoJuego) query.getSingleResult();
+			return Optional.of(videojuego);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
     }
-	public void deleteById(String id) {
-		baseDeDatos.remove(id);
+	@Transactional
+	public boolean deleteById(String id) {
+		Query query = entityManager.createNativeQuery("DELETE FROM VideoJuego WHERE id = :id");
+		query.setParameter("id", id);
+		int delete = query.executeUpdate();
+		return delete > 0;
 	}
 	//Actualizar videojuego
-	public VideoJuego update(VideoJuego videojuego) {
-        if (baseDeDatos.containsKey(videojuego.getId())) {
-            baseDeDatos.put(videojuego.getId(), videojuego);
-            return videojuego;
-        }
-        return null;
+	@Transactional
+	public Optional<VideoJuego> update(String id,VideoJuego videojuego) {
+        Query query = entityManager.createNativeQuery("UPDATE VideoJuego SET nombre = :nombre, fechaDePublicacion = :fechaDePublicacion, descripcion = :descripcion, publico = :publico, tipo = :tipo WHERE id = :id");
+        query.setParameter("nombre", videojuego.getNombre());
+        query.setParameter("fechaDePublicacion", videojuego.getFechaDePubliacion());
+        query.setParameter("descripcion", videojuego.getDescripcion());
+        query.setParameter("publico", videojuego.getPublico());
+        query.setParameter("tipo", videojuego.getTipo());
+        query.setParameter("id", id);
+        int update = query.executeUpdate();
+        if (update > 0) {
+			return findById(id);
+		} else {
+			return Optional.empty();
+		}
     }
-	public List<VideoJuego> findByFilters(String nombre, LocalDate fechaDePublicacion,String descripcion, String publico, String tipo) {
-		return baseDeDatos.values().stream()
-				.filter(videojuego -> nombre == null || videojuego.getNombre().equalsIgnoreCase(nombre))
-				.filter(videojuego -> fechaDePublicacion == null || videojuego.getFechaDePubliacion().equals(fechaDePublicacion))
-				.filter(videojuego -> publico == null || videojuego.getPublico().equalsIgnoreCase(publico))
-				.filter(videojuego -> tipo == null || videojuego.getTipo().equalsIgnoreCase(tipo))
-				.filter(videojuego -> descripcion == null || videojuego.getDescripcion().equalsIgnoreCase(descripcion))
-				.collect(Collectors.toList());
+	public List<VideoJuego> findByFilters(String nombre) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM VideoJuego WHERE nombre LIKE :nombre", VideoJuego.class);
+		query.setParameter("nombre",  nombre );
+		return query.getResultList();
 	}
 }

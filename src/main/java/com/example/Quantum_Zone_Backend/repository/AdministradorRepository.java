@@ -64,7 +64,7 @@ public class AdministradorRepository {
 	//Buscar administrador por filtros
 	public List<Administrador> findByFilters(String nombre) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Administrador WHERE nombre LIKE :nombre", Administrador.class);
-		query.setParameter("nombre", "%" + nombre + "%");
+		query.setParameter("nombre",  nombre );
 		return query.getResultList();
 	}
 }

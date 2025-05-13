@@ -1,50 +1,69 @@
 package com.example.Quantum_Zone_Backend.repository;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-
 import com.example.Quantum_Zone_Backend.modelo.Puesto;
 import com.example.Quantum_Zone_Backend.modelo.Consola;
 @Repository
 public class PuestoRepository {
-	private final Map<String, Puesto> baseDeDatos = new HashMap<>();
+	@PersistenceContext
+	private EntityManager entityManager;
 	//Guardar puesto
+	@Transactional
 	public Puesto save(Puesto puesto) {
-		baseDeDatos.put(puesto.getId(), puesto);
+		entityManager.persist(puesto);
 		return puesto;
 	}
 	//Buscar todos los puestos
+	@Transactional
 	public List<Puesto> findAll() {
-		return new ArrayList<>(baseDeDatos.values());
+		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto ", Puesto.class);
+		return query.getResultList();
 	}
 	//Buscar puesto por id
-	public Puesto findById(String id) {
-		return baseDeDatos.get(id);
+	@Transactional
+	public Optional<Puesto> findById(String id) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE id = :id", Puesto.class);
+		query.setParameter("id", id);
+		try {
+			Puesto puesto = (Puesto) query.getSingleResult();
+			return Optional.of(puesto);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
 	}
 	//Eliminar puesto por id
-	public void deleteById(String id) {
-		baseDeDatos.remove(id);
+	@Transactional
+	public boolean deleteById(String id) {
+		Query query = entityManager.createNativeQuery("DELETE FROM Puesto WHERE id = :id");
+		query.setParameter("id", id);
+		int delete = query.executeUpdate();
+		return delete > 0;
 	}
 	//Actualizar puesto
-	public Puesto update(Puesto puesto) {
-		if (baseDeDatos.containsKey(puesto.getId())) {
-			baseDeDatos.put(puesto.getId(), puesto);
-			return puesto;
+	@Transactional
+	public Optional<Puesto> update(String id, Puesto puesto) {
+		Query query = entityManager.createNativeQuery("UPDATE Puesto SET numeroDePuesto = :numeroDePuesto, consola = :consola, cantidadDeSillas = :cantidadDeSillas, canditadDeControles = :canditadDeControles WHERE id = :id");
+		query.setParameter("numeroDePuesto", puesto.getNumeroDePuesto());
+		query.setParameter("consola", puesto.getConsola());
+		query.setParameter("cantidadDeSillas", puesto.getCantidadDeSillas());
+		query.setParameter("canditadDeControles", puesto.getCanditadDeControles());
+		query.setParameter("id", puesto.getId());
+		int update = query.executeUpdate();
+		if (update > 0) {
+			return findById(puesto.getId());
+		} else {
+			return Optional.empty();
 		}
-		return null;
 	}
 	//Buscar puesto por filtros
-	public List<Puesto> findByFilters(String numeroDePuesto, Consola consola, int cantidadDeSillas, int cantidadDeControles) {
-		return baseDeDatos.values().stream()
-				.filter(consola1 -> numeroDePuesto == null || consola1.getNumeroDePuesto().equals(numeroDePuesto))
-				.filter(consola1 -> consola == null || consola1.getConsola().equals(consola))
-				.filter(consola1 -> cantidadDeSillas == 0 || consola1.getCantidadDeSillas() == cantidadDeSillas)
-				.filter(consola1 -> cantidadDeControles == 0  || consola1.getCanditadDeControles() == cantidadDeControles)
-				.collect(Collectors.toList());
-		
+	public List<Puesto> findByFilters(String numeroDePuesto) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE numeroDePuesto LIKE :numeroDePuesto", Puesto.class);
+		query.setParameter("numeroDePuesto", numeroDePuesto);
+		return query.getResultList();
 	}
 }

@@ -65,7 +65,7 @@ public class ClienteRepository {
 	//Buscar cliente por filtros
 	public List<Cliente> findByFilters(String nombre) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Cliente WHERE nombre LIKE :nombre", Cliente.class);
-		query.setParameter("nombre", "%" + nombre + "%");
+		query.setParameter("nombre", nombre );
 		return query.getResultList();
 	}
 }
