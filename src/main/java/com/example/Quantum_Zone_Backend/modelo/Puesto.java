@@ -69,7 +69,7 @@ public class Puesto {
 
 	@Override
 	public String toString() {
-		return "Puesto [id=" + id + ", numeroDePuesto=" + numeroDePuesto + ", consola=" + consola
+		return "Puesto [id=" + id + ", numeroDePuesto=" + numeroDePuesto + ", consola=" + idConsola
 				+ ", cantidadDeSillas=" + cantidadDeSillas + ", canditadDeControles=" + canditadDeControles + "]";
 	}
     
