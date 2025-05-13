@@ -67,9 +67,14 @@ public class VideoJuegoRepository {
 			return Optional.empty();
 		}
     }
-	public List<VideoJuego> findByFilters(String nombre) {
+	public Optional<List<VideoJuego>> findByFilters(String nombre) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM VideoJuego WHERE nombre LIKE :nombre", VideoJuego.class);
 		query.setParameter("nombre",  nombre );
-		return query.getResultList();
+		try {
+			List<VideoJuego> videojuegos = query.getResultList();
+			return Optional.of(videojuegos);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
 	}
 }
