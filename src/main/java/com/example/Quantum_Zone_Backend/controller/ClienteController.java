@@ -50,7 +50,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "200", description = "cliente encontrado"),
             @ApiResponse(responseCode = "404", description = "cliente no encontrado")
     })
-    public ResponseEntity<Cliente> getClienteById(@PathVariable @Parameter(description = "ID del cliente") String id) {
+    public ResponseEntity<Cliente> getClienteById(@PathVariable @Parameter(description = "ID del cliente") int id) {
 		Cliente cliente = clienteService.findById(id);
         if (cliente != null) {
             return new ResponseEntity<>(cliente, HttpStatus.OK);
@@ -76,7 +76,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "200", description = "Cliente actualizado con éxito"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<Cliente> updateCliente(@PathVariable @Parameter(description = "ID del cliente") String id,
+    public ResponseEntity<Cliente> updateCliente(@PathVariable @Parameter(description = "ID del cliente") int id,
                                                  @RequestBody @Parameter(description = "Datos actualizados del cliente") Cliente cliente) {
         Cliente existingCliente = clienteService.findById(id);
         if (existingCliente != null) {
@@ -94,7 +94,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "204", description = "Cliente eliminado con éxito"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<Void> deleteCliente(@PathVariable @Parameter(description = "ID del cliente") String id) {
+    public ResponseEntity<Void> deleteCliente(@PathVariable @Parameter(description = "ID del cliente") int id) {
     	Cliente existingCliente = clienteService.findById(id);
         if (existingCliente != null) {
         	clienteService.deleteById(id);

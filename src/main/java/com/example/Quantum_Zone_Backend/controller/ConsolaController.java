@@ -48,7 +48,7 @@ public class ConsolaController {
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Consola encontrada"),
 			@ApiResponse(responseCode = "404", description = "Consola no encontrada")
 	})
-	public ResponseEntity<Consola> getConsolaById(@PathVariable @Parameter(description = "ID de la consola") String id) {
+	public ResponseEntity<Consola> getConsolaById(@PathVariable @Parameter(description = "ID de la consola") int id) {
 		Consola consola = consolaService.findById(id);
 		if (consola != null) {
 			return new ResponseEntity<>(consola, HttpStatus.OK);
@@ -86,7 +86,7 @@ public class ConsolaController {
 			@ApiResponse(responseCode = "404", description = "Consola no encontrada"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
-	public ResponseEntity<Consola> updateConsola(@PathVariable @Parameter(description = "ID de la consola") String id,
+	public ResponseEntity<Consola> updateConsola(@PathVariable @Parameter(description = "ID de la consola") int id,
 			@RequestBody Consola consola) {
 		Consola consolaExistente = consolaService.findById(id);
 		if (consolaExistente != null) {
@@ -104,7 +104,7 @@ public class ConsolaController {
 			@ApiResponse(responseCode = "404", description = "Consola no encontrada"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
-	public ResponseEntity<Void> deleteConsola(@PathVariable @Parameter(description = "ID de la consola") String id) {
+	public ResponseEntity<Void> deleteConsola(@PathVariable @Parameter(description = "ID de la consola") int id) {
 		Consola consolaExistente = consolaService.findById(id);
 		if (consolaExistente != null) {
 			consolaService.deleteById(id);

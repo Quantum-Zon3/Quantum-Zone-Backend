@@ -56,7 +56,7 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "videojuego encontrado"),
             @ApiResponse(responseCode = "404", description = "videojuego no encontrado")
     })
-	public ResponseEntity<VideoJuego> getVideojuegoById(@PathVariable @Parameter(description = "ID del videojuego") String id) {
+	public ResponseEntity<VideoJuego> getVideojuegoById(@PathVariable @Parameter(description = "ID del videojuego") int id) {
 		VideoJuego videojuego = videoJuegoService.findById(id);
 		if (videojuego != null) {
 			return new ResponseEntity<>(videojuego, HttpStatus.OK);
@@ -84,7 +84,7 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "Videojuego actualizado con éxito"),
             @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     })
-	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "id") String id, @RequestBody @Parameter(description = "videojuego") VideoJuego videojuego) {
+	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "id") int id, @RequestBody @Parameter(description = "videojuego") VideoJuego videojuego) {
 		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
 		if (videojuegoExistente != null) {
 			videojuego.setId(id);
@@ -101,7 +101,7 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "204", description = "Videojuego eliminado con éxito"),
             @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     })
-	public ResponseEntity<Void> deleteVideojuego(@PathVariable @Parameter(description = "ID del videojuego")String id) {
+	public ResponseEntity<Void> deleteVideojuego(@PathVariable @Parameter(description = "ID del videojuego") int id) {
 		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
 		if (videojuegoExistente != null) {
 			videoJuegoService.deleteById(id);
