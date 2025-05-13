@@ -60,10 +60,15 @@ public class ObjetoRepository {
 		}
 	}
 	//Buscar objeto por filtros
-	public List<Objeto> findByFilters(String nombre) {
+	public Optional<List<Objeto>> findByFilters(String nombre) {
 	    Query query = entityManager.createNativeQuery("SELECT * FROM Objeto WHERE nombre LIKE :nombre", Objeto.class);
 	    query.setParameter("nombre",nombre);
-	    return query.getResultList();
+	    try {
+	        List<Objeto> objetos = query.getResultList();
+	        return Optional.of(objetos);
+	    } catch (Exception e) {
+	        return Optional.empty();
+	    }
 	}
 
 }

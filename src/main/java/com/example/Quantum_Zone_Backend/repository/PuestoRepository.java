@@ -61,9 +61,14 @@ public class PuestoRepository {
 		}
 	}
 	//Buscar puesto por filtros
-	public List<Puesto> findByFilters(String numeroDePuesto) {
+	public Optional<List<Puesto>> findByFilters(String numeroDePuesto) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE numeroDePuesto LIKE :numeroDePuesto", Puesto.class);
 		query.setParameter("numeroDePuesto", numeroDePuesto);
-		return query.getResultList();
+		try {
+			List<Puesto> puestos = query.getResultList();
+			return Optional.of(puestos);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
 	}
 }

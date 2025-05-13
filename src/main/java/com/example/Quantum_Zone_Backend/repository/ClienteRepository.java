@@ -63,9 +63,14 @@ public class ClienteRepository {
 		}
 	}
 	//Buscar cliente por filtros
-	public List<Cliente> findByFilters(String nombre) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Cliente WHERE nombre LIKE :nombre", Cliente.class);
-		query.setParameter("nombre", nombre );
-		return query.getResultList();
+	public Optional<List<Cliente>> findByFilters(String cedula) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM Cliente WHERE cedula LIKE :cedula", Cliente.class);
+		query.setParameter("cedula", cedula );
+		try {
+			List<Cliente> cliente = query.getResultList();
+			return Optional.of(cliente);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
 	}
 }

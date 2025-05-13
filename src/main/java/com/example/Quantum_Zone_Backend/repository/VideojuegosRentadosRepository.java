@@ -56,9 +56,14 @@ public class VideojuegosRentadosRepository {
 			return Optional.empty();
 		}
 	}
-	public List<VideojuegoRentado> findByFilters(VideoJuego videojuego) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE videojuego = :videojuego", VideojuegoRentado.class);
-		query.setParameter("videojuego", videojuego);
-		return query.getResultList();
+	public Optional<List<VideojuegoRentado>> findByFilters(Integer idVideojuego) {
+		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE idVideojuego = :idVideojuego", VideojuegoRentado.class);
+		query.setParameter("idVideojuego", idVideojuego);
+		try {
+			List<VideojuegoRentado> videojuegoRentado = query.getResultList();
+			return Optional.of(videojuegoRentado);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
 	}
 }
