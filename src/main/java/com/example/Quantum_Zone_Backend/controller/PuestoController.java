@@ -57,7 +57,7 @@ public class PuestoController {
             @ApiResponse(responseCode = "200", description = "puesto encontrado"),
             @ApiResponse(responseCode = "404", description = "puesto no encontrado")
     })
-	public ResponseEntity<Puesto> getPuestoById(@PathVariable  @Parameter(description = "ID del puesto")  String id) {
+	public ResponseEntity<Puesto> getPuestoById(@PathVariable  @Parameter(description = "ID del puesto")  int id) {
 		Puesto puesto = puestoService.findById(id);
 		if (puesto != null) {
 			return new ResponseEntity<>(puesto, HttpStatus.OK);
@@ -83,7 +83,7 @@ public class PuestoController {
 			@ApiResponse(responseCode = "200", description = "Puesto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
 	})	
-	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") String id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
+	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") int id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
 		Puesto puestoExistente = puestoService.findById(id);		
 		if (puestoExistente != null) {
 			puesto.setId(id);
@@ -100,7 +100,7 @@ public class PuestoController {
 			@ApiResponse(responseCode = "204", description = "Puesto eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
 	})
-	public ResponseEntity<Void> deletePuesto(@PathVariable @Parameter(description = "ID del puestoo") String id) {
+	public ResponseEntity<Void> deletePuesto(@PathVariable @Parameter(description = "ID del puestoo") int id) {
 		Puesto puestoExistente = puestoService.findById(id);
 		if (puestoExistente != null) {
 			puestoService.deleteById(id);

@@ -76,7 +76,7 @@ public class AdministradorController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador encontrado"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
 	public ResponseEntity<Administrador> getAdministradorById(
-			@PathVariable @Parameter(description = "ID del administrador") String id) {
+			@PathVariable @Parameter(description = "ID del administrador") int id) {
 		Administrador administrador = administradorService.findById(id);
 		if (administrador != null) {
 			return new ResponseEntity<>(administrador, HttpStatus.OK);
@@ -100,7 +100,7 @@ public class AdministradorController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
 	public ResponseEntity<Administrador> updateAdministrador(
-			@PathVariable @Parameter(description = "ID del administrador") String id,
+			@PathVariable @Parameter(description = "ID del administrador") int id,
 			@RequestBody @Parameter(description = "Datos del administrador a actualizar") Administrador administrador) {
 		Administrador administradorActualizado = administradorService.update(administrador);
 		if (administradorActualizado != null) {
@@ -116,7 +116,7 @@ public class AdministradorController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
 	public ResponseEntity<Void> deleteAdministrador(
-			@PathVariable @Parameter(description = "ID del administrador") String id) {
+			@PathVariable @Parameter(description = "ID del administrador") int id) {
 		administradorService.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

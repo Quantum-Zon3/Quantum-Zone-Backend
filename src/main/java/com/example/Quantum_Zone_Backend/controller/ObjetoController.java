@@ -47,7 +47,7 @@ public class ObjetoController {
 			@ApiResponse(responseCode = "200", description = "Objeto encontrado"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado")
 	})
-	public ResponseEntity<Objeto> getObjetoById(@PathVariable @Parameter(description = "ID del objeto") String id) {
+	public ResponseEntity<Objeto> getObjetoById(@PathVariable @Parameter(description = "ID del objeto") int id) {
 		Objeto objeto = objetoService.findById(id);
 		if (objeto != null) {
 			return new ResponseEntity<>(objeto, HttpStatus.OK);
@@ -67,7 +67,7 @@ public class ObjetoController {
 	@Operation(summary = "Actualizar objeto", description = "Actualiza un objeto existente basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
-	public ResponseEntity<Objeto> updateObjeto(@PathVariable @Parameter(description = "ID del objeto") String id, @RequestBody Objeto objeto) {
+	public ResponseEntity<Objeto> updateObjeto(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestBody Objeto objeto) {
 		Objeto objetoViejito = objetoService.findById(id);
 		if (objetoViejito != null) {
 			objeto.setId(id);
@@ -81,7 +81,7 @@ public class ObjetoController {
 	@Operation(summary = "Eliminar objeto", description = "Elimina un objeto existente basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
-	public ResponseEntity<Void> deleteObjeto(@PathVariable @Parameter(description = "ID del objeto") String id) {
+	public ResponseEntity<Void> deleteObjeto(@PathVariable @Parameter(description = "ID del objeto") int id) {
 		Objeto objeto = objetoService.findById(id);
 		if (objeto != null) {
 			objetoService.deleteById(id);

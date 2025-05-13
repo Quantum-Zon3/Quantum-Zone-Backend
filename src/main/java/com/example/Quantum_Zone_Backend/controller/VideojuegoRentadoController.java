@@ -58,7 +58,7 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado encontrado"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<VideojuegoRentado> getVideojuegoRentadoById(@PathVariable @Parameter(description = "ID del videojuego rentado") String id) {
+	public ResponseEntity<VideojuegoRentado> getVideojuegoRentadoById(@PathVariable @Parameter(description = "ID del videojuego rentado") int id) {
 		VideojuegoRentado videojuegoRentado = videojuegoRentadoService.findById(id);
 		if (videojuegoRentado != null) {
 			return new ResponseEntity<>(videojuegoRentado, HttpStatus.OK);
@@ -84,7 +84,7 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<VideojuegoRentado> updateVideojuegoRentado(@PathVariable String id, @RequestBody VideojuegoRentado videojuegoRentado) {
+	public ResponseEntity<VideojuegoRentado> updateVideojuegoRentado(@PathVariable int id, @RequestBody VideojuegoRentado videojuegoRentado) {
 		VideojuegoRentado videojuego = videojuegoRentadoService.findById(id);
 		if (videojuego != null) {
 			videojuego.setId(id);
@@ -102,7 +102,7 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<Void> deleteVideojuegoRentado(@PathVariable String id) {
+	public ResponseEntity<Void> deleteVideojuegoRentado(@PathVariable int id) {
 		VideojuegoRentado videojuegoRentado = videojuegoRentadoService.findById(id);
 		if (videojuegoRentado != null) {
 			videojuegoRentadoService.deleteById(id);
@@ -120,7 +120,7 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
 	public ResponseEntity<List<VideojuegoRentado>> filterVideojuegosRentados(
-			@RequestParam(required = false) String id,
+			@RequestParam(defaultValue = "0")@Parameter(required = false) int id,
 			@RequestParam(required = false) String cedula,
 			@RequestParam(required = false) VideoJuego videojuego,
 			@RequestParam(required = false) LocalDate fechaInicio,
