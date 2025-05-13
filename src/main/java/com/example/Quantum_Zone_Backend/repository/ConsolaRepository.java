@@ -27,7 +27,7 @@ public class ConsolaRepository {
 	 }
 	 //Buscar consola por id
 	 @Transactional
-	 public Optional<Consola> findById(String id) {
+	 public Optional<Consola> findById(Integer id) {
 		 Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE id = :id", Consola.class);
 		 query.setParameter("id", id);
 		 try {
@@ -39,7 +39,7 @@ public class ConsolaRepository {
 	    }
 	 //Eliminar consola por id
 	 @Transactional
-	 public boolean deleteById(String id) {
+	 public boolean deleteById(Integer id) {
 		 Query query = entityManager.createNativeQuery("DELETE FROM Consola WHERE id = :id");
 		 query.setParameter("id", id);
 		 int delete = query.executeUpdate();
@@ -47,7 +47,7 @@ public class ConsolaRepository {
 	 }
 	 //Actualizar consola
 	 @Transactional
-	 public Optional<Consola> update(String id,Consola consola) {
+	 public Optional<Consola> update(Integer id,Consola consola) {
 	    Query query = entityManager.createNativeQuery("UPDATE Consola SET marca = :marca, consola = :consola, fechaDePublicacion = :fechaDePublicacion WHERE id = :id");
 	    query.setParameter("marca", consola.getMarca());
 	    query.setParameter("consola", consola.getConsola());

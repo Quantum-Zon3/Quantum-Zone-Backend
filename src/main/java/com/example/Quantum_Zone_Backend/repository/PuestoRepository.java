@@ -26,7 +26,7 @@ public class PuestoRepository {
 	}
 	//Buscar puesto por id
 	@Transactional
-	public Optional<Puesto> findById(String id) {
+	public Optional<Puesto> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE id = :id", Puesto.class);
 		query.setParameter("id", id);
 		try {
@@ -38,7 +38,7 @@ public class PuestoRepository {
 	}
 	//Eliminar puesto por id
 	@Transactional
-	public boolean deleteById(String id) {
+	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM Puesto WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
@@ -46,10 +46,10 @@ public class PuestoRepository {
 	}
 	//Actualizar puesto
 	@Transactional
-	public Optional<Puesto> update(String id, Puesto puesto) {
-		Query query = entityManager.createNativeQuery("UPDATE Puesto SET numeroDePuesto = :numeroDePuesto, consola = :consola, cantidadDeSillas = :cantidadDeSillas, canditadDeControles = :canditadDeControles WHERE id = :id");
+	public Optional<Puesto> update(Integer id, Puesto puesto) {
+		Query query = entityManager.createNativeQuery("UPDATE Puesto SET numeroDePuesto = :numeroDePuesto, idConsola = :idConsola, cantidadDeSillas = :cantidadDeSillas, canditadDeControles = :canditadDeControles WHERE id = :id");
 		query.setParameter("numeroDePuesto", puesto.getNumeroDePuesto());
-		query.setParameter("consola", puesto.getConsola());
+		query.setParameter("idConsola", puesto.getIdConsola());
 		query.setParameter("cantidadDeSillas", puesto.getCantidadDeSillas());
 		query.setParameter("canditadDeControles", puesto.getCanditadDeControles());
 		query.setParameter("id", puesto.getId());

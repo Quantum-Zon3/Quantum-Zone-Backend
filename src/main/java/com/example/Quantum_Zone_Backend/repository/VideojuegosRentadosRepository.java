@@ -26,7 +26,7 @@ public class VideojuegosRentadosRepository {
 		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado", VideojuegoRentado.class);
 		return query.getResultList();
 	}
-	public Optional<VideojuegoRentado> findById(String id) {
+	public Optional<VideojuegoRentado> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE id = :id", VideojuegoRentado.class);
 		query.setParameter("id", id);
 		try {
@@ -36,16 +36,16 @@ public class VideojuegosRentadosRepository {
 			return Optional.empty();
 		}
 	}
-	public boolean deleteById(String id) {
+	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM VideojuegoRentado WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
 	}
-	public Optional<VideojuegoRentado> update(String id,VideojuegoRentado videojuegoRentado) {
-		Query query = entityManager.createNativeQuery("UPDATE VideojuegoRentado SET cliente = :cliente, videojuego = :videojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
-		query.setParameter("cliente", videojuegoRentado.getCliente());
-		query.setParameter("videojuego", videojuegoRentado.getVideojuego());
+	public Optional<VideojuegoRentado> update(Integer id,VideojuegoRentado videojuegoRentado) {
+		Query query = entityManager.createNativeQuery("UPDATE VideojuegoRentado SET idCliente = :idCliente, idVideojuego = :idVvideojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
+		query.setParameter("idCliente", videojuegoRentado.getIdCliente());
+		query.setParameter("idVideojuego", videojuegoRentado.getIdVideojuego());
 		query.setParameter("fechaAlquiler", videojuegoRentado.getFechaAlquiler());
 		query.setParameter("fechaDevolucion", videojuegoRentado.getFechaDevolucion());
 		query.setParameter("id", id);

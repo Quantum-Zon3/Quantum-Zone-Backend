@@ -24,7 +24,7 @@ public class ObjetoRepository {
 		return query.getResultList();
 	}
 	//Buscar objeto por id
-	public Optional<Objeto> findById(String id) {
+	public Optional<Objeto> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Objeto WHERE id = :id", Objeto.class);
 		query.setParameter("id", id);
 		try {
@@ -36,7 +36,7 @@ public class ObjetoRepository {
 	}
 	//Eliminar objeto por id
 	@Transactional
-	public boolean deleteById(String id) {
+	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM Objeto WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
@@ -44,7 +44,7 @@ public class ObjetoRepository {
 	}
 	//Actualizar objeto
 	@Transactional
-	public Optional<Objeto> update(String id, Objeto objeto) {
+	public Optional<Objeto> update(Integer id, Objeto objeto) {
 		Query query = entityManager.createNativeQuery("UPDATE Objeto SET nombre = :nombre, descripcion = :descripcion, fecha = :fecha, estado = :estado, categoria = :categoria WHERE id = :id");
 		query.setParameter("nombre", objeto.getNombre());
 		query.setParameter("descripcion", objeto.getDescripcion());

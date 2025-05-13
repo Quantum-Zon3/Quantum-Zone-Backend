@@ -27,7 +27,7 @@ public class AdministradorRepository {
 	}
 	//Buscar administrador por id
 	@Transactional
-	public Optional <Administrador> findById(String id) {
+	public Optional <Administrador> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM Administrador WHERE id = :id", Administrador.class);
 		query.setParameter("id", id);
 		try {
@@ -39,7 +39,7 @@ public class AdministradorRepository {
 	}
 	//Eliminar administrador por id
 	@Transactional
-	public boolean deleteById(String id) {
+	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM Administrador WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
@@ -47,7 +47,7 @@ public class AdministradorRepository {
 	}
 	//Actualizar administrador
 	@Transactional
-	public Optional<Administrador> update(String id,Administrador administrador) {
+	public Optional<Administrador> update(Integer id,Administrador administrador) {
 		Query query = entityManager.createNativeQuery("UPDATE Administrador SET nombre = :nombre, contraseña = :contraseña, edad = :edad, cedula = :cedula WHERE id = :id");
 		query.setParameter("nombre", administrador.getNombre());
 		query.setParameter("contraseña", administrador.getContraseña());
