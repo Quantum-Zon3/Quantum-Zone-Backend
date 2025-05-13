@@ -1,21 +1,25 @@
 package com.example.Quantum_Zone_Backend.service;
-import java.util.List;
 import com.example.Quantum_Zone_Backend.repository.AdministradorRepository;
-import java.util.Map;
+import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.modelo.Administrador;
 @Service
 public class AdministradorService {
 	private final AdministradorRepository administradorRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public AdministradorService(AdministradorRepository administradorRepository) {
+	public AdministradorService(AdministradorRepository administradorRepository, PasswordEncoder passwordEncoder) {
 		this.administradorRepository = administradorRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	// guardar un administrador
 	public Administrador save(Administrador administrador) {
+		// Encriptar la contraseña antes de guardarla
+		administrador.setContraseña(passwordEncoder.encode(administrador.getContraseña()));
 		return administradorRepository.save(administrador);
 	}
 	// encontrar un administrador por id
@@ -32,6 +36,7 @@ public class AdministradorService {
 	}
 	// actualizar un administrador
 	public Administrador update(Administrador administrador) {
+		administrador.setContraseña(passwordEncoder.encode(administrador.getContraseña()));
 		return administradorRepository.update(administrador);
 	}
 	// buscar administrador por filtros
