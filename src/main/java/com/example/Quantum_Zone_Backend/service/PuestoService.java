@@ -1,5 +1,7 @@
 package com.example.Quantum_Zone_Backend.service;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Quantum_Zone_Backend.repository.PuestoRepository;
@@ -21,7 +23,7 @@ public class PuestoService {
 		return puestoRepository.save(puesto);
 	}
 	// encontrar un puesto por id
-	public Puesto findById(String id) {
+	public Optional<Puesto> findById(Integer id) {
 		return puestoRepository.findById(id);
 	}
 	// listar todos los puestos
@@ -29,16 +31,16 @@ public class PuestoService {
 		return puestoRepository.findAll();
 	}
 	// eliminar un puesto por id
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		puestoRepository.deleteById(id);
 	}
 	// actualizar un puesto
-	public Puesto update(Puesto puesto) {
-		return puestoRepository.update(puesto);
+	public Optional<Puesto> update(Integer id,Puesto puesto) {
+		return puestoRepository.update(id, puesto);
 	}
 	// buscar puesto por filtros
-	public List<Puesto> findByFilters(String numeroDePuesto, Consola consola, int cantidadDeSillas, int cantidadDeControles) {
-		return puestoRepository.findByFilters(numeroDePuesto, consola, cantidadDeSillas, cantidadDeControles);
+	public List<Puesto> findByFilters(String numeroDePuesto) {
+		return puestoRepository.findByFilters(numeroDePuesto);
 	}
 	
 }
