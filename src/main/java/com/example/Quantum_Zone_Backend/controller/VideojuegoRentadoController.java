@@ -2,6 +2,7 @@ package com.example.Quantum_Zone_Backend.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,7 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
 	public ResponseEntity<List<VideojuegoRentado>> getAllVideojuegosRentados() {
-		List<VideojuegoRentado> videojuegosRentados = videojuegoRentadoService.findAll();
-		return new ResponseEntity<>(videojuegosRentados, HttpStatus.OK);
+		return new ResponseEntity<>(videojuegoRentadoService.findAll(), HttpStatus.OK);
 	}
 	
 	// Obtener videojuego rentado por id
@@ -59,12 +59,9 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
 	public ResponseEntity<VideojuegoRentado> getVideojuegoRentadoById(@PathVariable @Parameter(description = "ID del videojuego rentado") int id) {
-		VideojuegoRentado videojuegoRentado = videojuegoRentadoService.findById(id);
-		if (videojuegoRentado != null) {
-			return new ResponseEntity<>(videojuegoRentado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return videojuegoRentadoService.findById(id)
+				.map(videojuegoRentado -> new ResponseEntity<>(videojuegoRentado, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	// Crear un nuevo videojuego rentado
 	@PostMapping
@@ -74,8 +71,9 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
 	public ResponseEntity<VideojuegoRentado> createVideojuegoRentado(@RequestBody VideojuegoRentado videojuegoRentado) {
-		VideojuegoRentado nuevoVideojuegoRentado = videojuegoRentadoService.save(videojuegoRentado);
-		return new ResponseEntity<>(nuevoVideojuegoRentado, HttpStatus.CREATED);
+		VideojuegoRentado videojuegoR = videojuegoRentadoService.save(videojuegoRentado);
+		return new ResponseEntity<>(videojuegoR, HttpStatus.CREATED);
+	
 	}
 	// Actualizar videojuego rentado
 	@PutMapping("/{id}")
@@ -85,14 +83,13 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
 	public ResponseEntity<VideojuegoRentado> updateVideojuegoRentado(@PathVariable int id, @RequestBody VideojuegoRentado videojuegoRentado) {
-		VideojuegoRentado videojuego = videojuegoRentadoService.findById(id);
-		if (videojuego != null) {
-			videojuego.setId(id);
-			VideojuegoRentado videojuegoActualizado = videojuegoRentadoService.update(videojuego);
-			return new ResponseEntity<>(videojuegoActualizado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return videojuegoRentadoService.findById(id)
+				.map(existingVideojuegoRentado -> {
+					videojuegoRentado.setId(id);
+					VideojuegoRentado updatedVideojuegoRentado = videojuegoRentadoService.save(videojuegoRentado);
+					return new ResponseEntity<>(updatedVideojuegoRentado, HttpStatus.OK);
+				})
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
 	// Eliminar videojuego rentado
@@ -103,13 +100,8 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
 	public ResponseEntity<Void> deleteVideojuegoRentado(@PathVariable int id) {
-		VideojuegoRentado videojuegoRentado = videojuegoRentadoService.findById(id);
-		if (videojuegoRentado != null) {
-			videojuegoRentadoService.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		boolean videojuegoRentadoEliminado = videojuegoRentadoService.deleteById(id);
+		return videojuegoRentadoEliminado ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	// Filtrar videojuegos rentados
@@ -120,15 +112,10 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
 	public ResponseEntity<List<VideojuegoRentado>> filterVideojuegosRentados(
-			@RequestParam(defaultValue = "0")@Parameter(required = false) int id,
-			@RequestParam(required = false) String cedula,
-			@RequestParam(required = false) VideoJuego videojuego,
-			@RequestParam(required = false) LocalDate fechaInicio,
-			@RequestParam(required = false) LocalDate fechaFin) {
-		List<VideojuegoRentado> videojuegosRentados = videojuegoRentadoService.findByFilters(id, cedula, videojuego, fechaInicio, fechaFin);
-		return new ResponseEntity<>(videojuegosRentados, HttpStatus.OK);
+			@RequestParam(defaultValue = "0")@Parameter(required = false) int idVideojuego)
+			{
+		return videojuegoRentadoService.findByFilters(idVideojuego)
+				.map(videojuegos -> new ResponseEntity<>(videojuegos, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
-	
-	
-
 }
