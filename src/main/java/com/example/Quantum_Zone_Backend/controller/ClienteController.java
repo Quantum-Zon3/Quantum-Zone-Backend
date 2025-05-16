@@ -22,12 +22,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/quantumZone/clientes")
 @Tag(name = "Cliente", description = "Controlador de clientes")
 public class ClienteController {
+	
 	private final ClienteService clienteService;
+	//private final JWTService jwtService;
 
 	@Autowired
 	public ClienteController(ClienteService clienteService) {
@@ -40,8 +43,7 @@ public class ClienteController {
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
 	
 	public ResponseEntity<List<Cliente>> getAllClientes() {
-		List<Cliente> clientes = clienteService.findAll();
-		return new ResponseEntity<>(clientes, HttpStatus.OK);
+		return new ResponseEntity<>(clienteService.findAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
@@ -51,14 +53,12 @@ public class ClienteController {
             @ApiResponse(responseCode = "404", description = "cliente no encontrado")
     })
     public ResponseEntity<Cliente> getClienteById(@PathVariable @Parameter(description = "ID del cliente") int id) {
-		Cliente cliente = clienteService.findById(id);
-        if (cliente != null) {
-            return new ResponseEntity<>(cliente, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+		return clienteService.findById(id)
+				.map(cliente -> new ResponseEntity<>(cliente, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        
     }
-
+	
     @PostMapping
     @Operation(summary = "Crear un nuevo cliente", description = "Crea un nuevo cliente con los datos proporcionados.")
     @ApiResponses(value = {
@@ -66,8 +66,8 @@ public class ClienteController {
             @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     public ResponseEntity<Cliente> createCliente(@RequestBody @Parameter(description = "Datos del cliente a crear") Cliente cliente) {
-    	Cliente newCliente = clienteService.save(cliente);
-        return new ResponseEntity<>(newCliente, HttpStatus.CREATED);
+    	Cliente nuevoCliente = clienteService.save(cliente);
+		return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
     }
 	
 	@PutMapping("/{id}")
@@ -78,14 +78,9 @@ public class ClienteController {
     })
     public ResponseEntity<Cliente> updateCliente(@PathVariable @Parameter(description = "ID del cliente") int id,
                                                  @RequestBody @Parameter(description = "Datos actualizados del cliente") Cliente cliente) {
-        Cliente existingCliente = clienteService.findById(id);
-        if (existingCliente != null) {
-        	cliente.setId(id);
-            Cliente updatedCliente = clienteService.update(cliente);
-            return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return clienteService.update(id, cliente)
+				.map(updatedCliente -> new ResponseEntity<>(updatedCliente, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
@@ -95,13 +90,8 @@ public class ClienteController {
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
     public ResponseEntity<Void> deleteCliente(@PathVariable @Parameter(description = "ID del cliente") int id) {
-    	Cliente existingCliente = clienteService.findById(id);
-        if (existingCliente != null) {
-        	clienteService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    	boolean clienteEliminado = clienteService.deleteById(id);
+    	return clienteEliminado ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/buscar")
@@ -119,11 +109,9 @@ public class ClienteController {
             @RequestParam(required = false) @Parameter(description = "Teléfono del cliente") String telefono,
             @RequestParam(required = false) @Parameter(description = "Fecha de registro del cliente") LocalDate fechaRegistro,
             @RequestParam(required = false) @Parameter(description = "Email del usuario") String email) {
-        List<Cliente> clientes = clienteService.findByFilters(nombre, edad, direccion, imagen, cedula, telefono, fechaRegistro, email);
-        if (clientes.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
+		return clienteService.findByFilters(cedula)
+				.map(clientes -> new ResponseEntity<>(clientes, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }
