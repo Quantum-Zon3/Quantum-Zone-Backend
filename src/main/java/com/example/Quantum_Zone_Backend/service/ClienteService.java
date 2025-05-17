@@ -34,8 +34,8 @@ public class ClienteService {
 		return clienteRepository.findAll();
 	}
 	// eliminar un cliente por id
-	public void deleteById(Integer id) {
-		clienteRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+		return clienteRepository.deleteById(id);
 	}
 	// actualizar un cliente
 	public Optional<Cliente> update(Integer id, Cliente cliente) {

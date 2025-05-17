@@ -31,8 +31,8 @@ public class PuestoService {
 		return puestoRepository.findAll();
 	}
 	// eliminar un puesto por id
-	public void deleteById(Integer id) {
-		puestoRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+		return puestoRepository.deleteById(id);
 	}
 	// actualizar un puesto
 	public Optional<Puesto> update(Integer id,Puesto puesto) {

@@ -32,8 +32,8 @@ public class AdministradorService {
 		return administradorRepository.findAll();
 	}
 	// eliminar un administrador por id
-	public void deleteById(Integer id) {
-		administradorRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+		return administradorRepository.deleteById(id);
 	}
 	// actualizar un administrador
 	public Optional<Administrador> update(Integer id, Administrador administrador) {
