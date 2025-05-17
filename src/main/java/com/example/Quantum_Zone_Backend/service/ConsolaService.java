@@ -30,8 +30,8 @@ public class ConsolaService {
 		return consolaRepository.findAll();
 	}
 	// eliminar una consola por id
-	public void deleteById(Integer id) {
-		consolaRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+		return consolaRepository.deleteById(id);
 	}
 	// actualizar una consola
 	public Optional<Consola> update(Integer id, Consola consola) {

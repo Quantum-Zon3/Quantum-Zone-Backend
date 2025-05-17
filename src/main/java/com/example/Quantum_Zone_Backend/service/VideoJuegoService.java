@@ -32,8 +32,8 @@ public class VideoJuegoService {
 			return videojuegoRepository.findAll();
 		}
 		// eliminar un videojuego por id
-		public void deleteById(Integer id) {
-			videojuegoRepository.deleteById(id);
+		public boolean deleteById(Integer id) {
+		return 	videojuegoRepository.deleteById(id);
 		}
 		// actualizar un videojuego
 		public Optional<VideoJuego> update(Integer id, VideoJuego videojuego) {

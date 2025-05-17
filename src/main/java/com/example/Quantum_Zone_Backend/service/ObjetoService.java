@@ -27,8 +27,8 @@ public class ObjetoService {
 	public List<Objeto> findAll() {
 		return objetoRepository.findAll();
 	}
-	public void deleteById(Integer id) {
-		objetoRepository.deleteById(id);	
+	public boolean deleteById(Integer id) {
+		return objetoRepository.deleteById(id);	
 	}
 	public Optional<Objeto> update(Integer id,Objeto objeto) {
 		return objetoRepository.update(id,objeto);

@@ -46,8 +46,8 @@ public class VideojuegoRentadoService {
 	}
 
 	// eliminar un puesto por id
-	public void deleteById(Integer id) {
-		videojuegoRRepository.deleteById(id);
+	public boolean deleteById(Integer id) {
+	return videojuegoRRepository.deleteById(id);
 	}
 
 	// actualizar un puesto
