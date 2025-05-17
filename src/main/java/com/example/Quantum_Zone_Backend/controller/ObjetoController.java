@@ -37,8 +37,7 @@ public class ObjetoController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de objetos obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
 	public ResponseEntity<List<Objeto>> getAllObjetos() {
-		List<Objeto> objetos = objetoService.findAll();
-		return new ResponseEntity<>(objetos, HttpStatus.OK);
+		return new ResponseEntity<>(objetoService.findAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
@@ -48,12 +47,9 @@ public class ObjetoController {
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado")
 	})
 	public ResponseEntity<Objeto> getObjetoById(@PathVariable @Parameter(description = "ID del objeto") int id) {
-		Objeto objeto = objetoService.findById(id);
-		if (objeto != null) {
-			return new ResponseEntity<>(objeto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return objetoService.findById(id)
+				.map(objeto -> new ResponseEntity<>(objeto, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	@PostMapping
 	@Operation(summary = "Crear un nuevo objeto", description = "Crea un nuevo objeto y lo guarda en la base de datos.")
@@ -68,27 +64,21 @@ public class ObjetoController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
 	public ResponseEntity<Objeto> updateObjeto(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestBody Objeto objeto) {
-		Objeto objetoViejito = objetoService.findById(id);
-		if (objetoViejito != null) {
-			objeto.setId(id);
-			Objeto objetoActualizado = objetoService.update(objeto);
-			return new ResponseEntity<>(objetoActualizado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return objetoService.findById(id)
+				.map(existingObjeto -> {
+					objeto.setId(id);
+					Objeto updatedObjeto = objetoService.save(objeto);
+					return new ResponseEntity<>(updatedObjeto, HttpStatus.OK);
+				})
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Eliminar objeto", description = "Elimina un objeto existente basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
 	public ResponseEntity<Void> deleteObjeto(@PathVariable @Parameter(description = "ID del objeto") int id) {
-		Objeto objeto = objetoService.findById(id);
-		if (objeto != null) {
-			objetoService.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		boolean objetoExists = objetoService.deleteById(id);
+		return objetoExists ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping("/filtros")
@@ -96,18 +86,10 @@ public class ObjetoController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de objetos filtrados obtenida con éxito"),
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta") })
 	public ResponseEntity<List<Objeto>> getObjetosByFilters(
-			@RequestParam(required = false) @Parameter(description = "nombre") String nombre,
-	        @RequestParam(required = false) @Parameter(description = "descripción") String descripcion,
-	        @RequestParam(required = false) @Parameter(description = "fecha") LocalDate fecha,
-	        @RequestParam(required = false) @Parameter(description = "estado") String estado,
-	        @RequestParam(required = false) @Parameter(description = "categoría") String categoria) {
-		List<Objeto> objetosFiltrados = objetoService.findByFilters(nombre, descripcion, fecha, estado, categoria);
-		if (objetosFiltrados.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(objetosFiltrados, HttpStatus.OK);
-		}
+			@RequestParam(required = false) @Parameter(description = "nombre") String nombre) {
+		
+		return objetoService.findByFilters(nombre)
+				.map(objetos -> new ResponseEntity<>(objetos, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}	
-	
-
 }
