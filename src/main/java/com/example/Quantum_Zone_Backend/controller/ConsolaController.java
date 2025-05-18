@@ -22,23 +22,31 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.Quantum_Zone_Backend.service.JwtService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/quantumZone/consolas")
 @Tag(name = "Consola", description = "Controlador de consolas")
 public class ConsolaController {
 	private final ConsolaService consolaService;
+	private final JwtService jwtService;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public ConsolaController(ConsolaService consolaService) {
+	public ConsolaController(JwtService jwtService,ConsolaService consolaService, PasswordEncoder passwordEncoder) {
 		this.consolaService = consolaService;
+		this.jwtService = jwtService;
+		this.passwordEncoder = passwordEncoder;
+		
 	}
 	
 	@GetMapping
 	@Operation(summary = "Obtener todas las consolas", description = "Devuelve una lista de todas las consolas registradas.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de consolas obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
-	public ResponseEntity<List<Consola>> getAllConsolas() {
+	public ResponseEntity<?> getAllConsolas(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
 		List<Consola> consolas = consolaService.findAll();
 		return new ResponseEntity<>(consolas, HttpStatus.OK);
 	}
@@ -48,34 +56,23 @@ public class ConsolaController {
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Consola encontrada"),
 			@ApiResponse(responseCode = "404", description = "Consola no encontrada")
 	})
-	public ResponseEntity<Consola> getConsolaById(@PathVariable @Parameter(description = "ID de la consola") int id) {
-		Consola consola = consolaService.findById(id);
-		if (consola != null) {
-			return new ResponseEntity<>(consola, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getConsolaById(@PathVariable @Parameter(description = "ID de la consola") int id, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return consolaService.findById(id)
+				.map(consola -> new ResponseEntity<>(consola, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
-	@GetMapping("/buscarPorNombre")
-	@Operation(summary = "Buscar consola por nombre", description = "Devuelve una lista de consolas que coinciden con el nombre proporcionado.")
-	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Consolas encontradas"),
-			@ApiResponse(responseCode = "404", description = "Consola no encontrada"),
-			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
-	})
-	public ResponseEntity<List<Consola>> getConsolasByNombre(@RequestParam @Parameter(description = "Nombre de la consola") String nombre) {
-		List<Consola> consolas = consolaService.findByNombre(nombre);
-		if (consolas.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(consolas, HttpStatus.OK);
-	}
+
 	
 	@PostMapping
 	@Operation(summary = "Crear nueva consola", description = "Crea una nueva consola y la guarda en la base de datos.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Consola creada con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
-	public ResponseEntity<Consola> createConsola(@RequestBody Consola consola) {
+	public ResponseEntity<Consola> createConsola(@RequestBody @Parameter(description = "Datos de la nueva consola") Consola consola) {
 		Consola nuevaConsola = consolaService.save(consola);
 		return new ResponseEntity<>(nuevaConsola, HttpStatus.CREATED);
 	}
@@ -87,15 +84,14 @@ public class ConsolaController {
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
 	public ResponseEntity<Consola> updateConsola(@PathVariable @Parameter(description = "ID de la consola") int id,
-			@RequestBody Consola consola) {
-		Consola consolaExistente = consolaService.findById(id);
-		if (consolaExistente != null) {
-			consola.setId(id);
-			Consola consolaActualizada = consolaService.update(consola);
-			return new ResponseEntity<>(consolaActualizada, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			@RequestBody Consola consola, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return consolaService.update(id, consola)
+				.map(consolaExistente -> new ResponseEntity<>(consolaExistente, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
 	@DeleteMapping("/{id}")
@@ -104,14 +100,13 @@ public class ConsolaController {
 			@ApiResponse(responseCode = "404", description = "Consola no encontrada"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
-	public ResponseEntity<Void> deleteConsola(@PathVariable @Parameter(description = "ID de la consola") int id) {
-		Consola consolaExistente = consolaService.findById(id);
-		if (consolaExistente != null) {
-			consolaService.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Void> deleteConsola(@PathVariable @Parameter(description = "ID de la consola") int id, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		boolean isDeleted = consolaService.deleteById(id);
+		return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping("/buscar")
@@ -121,14 +116,10 @@ public class ConsolaController {
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
 	public ResponseEntity<List<Consola>> getConsolasByFilters(
-			@RequestParam(required = false) @Parameter(description = "Marca de la consola") String marca,
-			@RequestParam(required = false) @Parameter(description = "Nombre de la consola") String consola,
-			@RequestParam(required = false) @Parameter(description = "Fecha de publicación de la consola") LocalDate fechaDePublicacion) {
-		List<Consola> consolas = consolaService.findByFilters(marca, consola, fechaDePublicacion);
-		if (consolas.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(consolas, HttpStatus.OK);
+			@RequestParam(required = false) @Parameter(description = "Nombre de la consola") String consola) {
+		return consolaService.findByFilters(consola)
+				.map(consolas -> new ResponseEntity<>(consolas, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 }

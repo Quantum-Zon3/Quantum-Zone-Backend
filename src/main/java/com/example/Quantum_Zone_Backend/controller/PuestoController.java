@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import com.example.Quantum_Zone_Backend.modelo.Consola;
 import com.example.Quantum_Zone_Backend.modelo.Puesto;
 import com.example.Quantum_Zone_Backend.service.PuestoService;
+import com.example.Quantum_Zone_Backend.service.JwtService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/quantumZone/puestos")
@@ -32,10 +32,15 @@ import com.example.Quantum_Zone_Backend.service.PuestoService;
 public class PuestoController {
 
 	private final PuestoService puestoService;
+	private final JwtService jwtService;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public PuestoController(PuestoService puestoService) {
+	public PuestoController(JwtService jwtService,PuestoService puestoService, PasswordEncoder passwordEncoder) {
 		this.puestoService = puestoService;
+		this.jwtService = jwtService;
+		this.passwordEncoder = passwordEncoder;
+		
 	}
 	
 	//Obtener todos los puestos
@@ -45,7 +50,8 @@ public class PuestoController {
             @ApiResponse(responseCode = "200", description = "Lista de puestos obtenida con éxito"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-	public ResponseEntity<List<Puesto>> getAllPuestos() {
+	public ResponseEntity<?> getAllPuestos(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
 		List<Puesto> puestos = puestoService.findAll();
 		return new ResponseEntity<>(puestos, HttpStatus.OK);
 	}
@@ -57,13 +63,15 @@ public class PuestoController {
             @ApiResponse(responseCode = "200", description = "puesto encontrado"),
             @ApiResponse(responseCode = "404", description = "puesto no encontrado")
     })
-	public ResponseEntity<Puesto> getPuestoById(@PathVariable  @Parameter(description = "ID del puesto")  int id) {
-		Puesto puesto = puestoService.findById(id);
-		if (puesto != null) {
-			return new ResponseEntity<>(puesto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getPuestoById(@PathVariable  @Parameter(description = "ID del puesto")  int id,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return puestoService.findById(id)
+				.map(puesto -> new ResponseEntity<>(puesto, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	//Crear puesto
 	@PostMapping
@@ -83,15 +91,14 @@ public class PuestoController {
 			@ApiResponse(responseCode = "200", description = "Puesto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
 	})	
-	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") int id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto) {
-		Puesto puestoExistente = puestoService.findById(id);		
-		if (puestoExistente != null) {
-			puesto.setId(id);
-			Puesto puestoActualizado = puestoService.update(puesto);
-			return new ResponseEntity<>(puestoActualizado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Puesto> updatePuesto(@PathVariable @Parameter(description = "ID del puesto") int id, @RequestBody @Parameter(description = "Datos actualizados del puesto") Puesto puesto,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return puestoService.update(id, puesto)
+				.map(puestoExistente -> new ResponseEntity<>(puestoExistente, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	//Eliminar puesto
 	@DeleteMapping("/{id}")
@@ -100,14 +107,14 @@ public class PuestoController {
 			@ApiResponse(responseCode = "204", description = "Puesto eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Puesto no encontrado")
 	})
-	public ResponseEntity<Void> deletePuesto(@PathVariable @Parameter(description = "ID del puestoo") int id) {
-		Puesto puestoExistente = puestoService.findById(id);
-		if (puestoExistente != null) {
-			puestoService.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Void> deletePuesto(@PathVariable @Parameter(description = "ID del puestoo") int id,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		boolean isDeleted = puestoService.deleteById(id);
+		return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	//Buscar puesto por filtros
 	@GetMapping("/buscar")
@@ -118,14 +125,9 @@ public class PuestoController {
 	})
 	public ResponseEntity<List<Puesto>> getPuestos(
 			
-			@RequestParam(required = false)  @Parameter (description = "Numero de puestos en puesto") String numeroDePuesto,
-			@RequestParam(required = false)  @Parameter (description = "Consola en la que esta el puesto")Consola consola,
-			@RequestParam(required = false)  @Parameter (description = "Cantidad de filas en puesto")int cantidadDeSillas,
-			@RequestParam(required = false)  @Parameter (description = "Cantidad de controles para la consola del puesto")int canditadDeControles) {		
-		List<Puesto> puestosFiltrados = puestoService.findByFilters(numeroDePuesto, consola, cantidadDeSillas, canditadDeControles);
-		if (puestosFiltrados.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-		return new ResponseEntity<>(puestosFiltrados, HttpStatus.OK);
+			@RequestParam(required = false)  @Parameter (description = "Numero de puestos en puesto") String numeroDePuesto) {		
+		return puestoService.findByFilters(numeroDePuesto)
+				.map(puestos -> new ResponseEntity<>(puestos, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}
 }

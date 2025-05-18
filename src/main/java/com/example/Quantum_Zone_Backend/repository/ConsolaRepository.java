@@ -61,7 +61,7 @@ public class ConsolaRepository {
 	        }
 	    }
 	 //Buscar consola por filtros
-	 public Optional<List<Consola>> findByNombre(String consola) {
+	 public Optional<List<Consola>> findByFilters(String consola) {
 	    Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE consola LIKE :consola", Consola.class);
 	    query.setParameter("consola", consola);
 	    try {
