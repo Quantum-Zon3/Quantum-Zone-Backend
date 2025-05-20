@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import com.example.Quantum_Zone_Backend.service.VideoJuegoService;
 import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
+import com.example.Quantum_Zone_Backend.service.JwtService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/quantumZone/videojuegos")
@@ -31,10 +31,16 @@ import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
 public class VideojuegoController {
 	
 	private VideoJuegoService videoJuegoService;
+	private final JwtService jwtService;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public VideojuegoController(VideoJuegoService videoJuegoService) {
+	public VideojuegoController(VideoJuegoService videoJuegoService, JwtService jwtService, PasswordEncoder passwordEncoder) {
 		this.videoJuegoService = videoJuegoService;
+		this.jwtService = jwtService;
+		this.passwordEncoder = passwordEncoder;
+		
+		
 	}
 	
 	// Obtener todos los videojuegos
@@ -44,7 +50,8 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "Lista de videojuegos obtenida con éxito"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-	public ResponseEntity<List<VideoJuego>> getAllVideojuegos() {
+	public ResponseEntity<?> getAllVideojuegos(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
 		List<VideoJuego> videojuegos = videoJuegoService.findAll();
 		return new ResponseEntity<>(videojuegos, HttpStatus.OK);
 	}
@@ -56,13 +63,14 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "videojuego encontrado"),
             @ApiResponse(responseCode = "404", description = "videojuego no encontrado")
     })
-	public ResponseEntity<VideoJuego> getVideojuegoById(@PathVariable @Parameter(description = "ID del videojuego") int id) {
-		VideoJuego videojuego = videoJuegoService.findById(id);
-		if (videojuego != null) {
-			return new ResponseEntity<>(videojuego, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getVideojuegoById(@PathVariable @Parameter(description = "ID del videojuego") int id,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return videoJuegoService.findById(id)
+				.map(videojuego -> new ResponseEntity<>(videojuego, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
 	// Crear videojuego
@@ -84,15 +92,14 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "200", description = "Videojuego actualizado con éxito"),
             @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     })
-	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "id") int id, @RequestBody @Parameter(description = "videojuego") VideoJuego videojuego) {
-		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
-		if (videojuegoExistente != null) {
-			videojuego.setId(id);
-			VideoJuego videojuegoActualizado = videoJuegoService.update(videojuego);			
-			return new ResponseEntity<>(videojuegoActualizado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<VideoJuego> updateVideojuego(@PathVariable @Parameter(description = "id") int id, @RequestBody @Parameter(description = "videojuego") VideoJuego videojuego,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		return videoJuegoService.update(id, videojuego)
+				.map(videojuegoExistente -> new ResponseEntity<>(videojuegoExistente, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	// Eliminar videojuego
 	@DeleteMapping("/{id}")
@@ -101,14 +108,14 @@ public class VideojuegoController {
             @ApiResponse(responseCode = "204", description = "Videojuego eliminado con éxito"),
             @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     })
-	public ResponseEntity<Void> deleteVideojuego(@PathVariable @Parameter(description = "ID del videojuego") int id) {
-		VideoJuego videojuegoExistente = videoJuegoService.findById(id);
-		if (videojuegoExistente != null) {
-			videoJuegoService.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Void> deleteVideojuego(@PathVariable @Parameter(description = "ID del videojuego") int id,@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		boolean isDeleted = videoJuegoService.deleteById(id);
+		return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	//Buscar puesto por filtros
 	@GetMapping("/buscar")
@@ -119,15 +126,9 @@ public class VideojuegoController {
     })
 	public ResponseEntity<List<VideoJuego>> getVideojuegos(
 			
-				@RequestParam(required = false) @Parameter (description = "Nombre del videojuego") String nombre,
-				@RequestParam(required = false) @Parameter (description = "Fecha de publicacion del videojuego")LocalDate fechaDePublicacion,
-				@RequestParam(required = false) @Parameter (description = "Descripcion del videojuego")String descripcion,
-				@RequestParam(required = false) @Parameter (description = "Publico al que va dirigido el videojuego")String publico,
-				@RequestParam(required = false) @Parameter (description = "Tipo de juego")String tipo){
-		List<VideoJuego> videojuegosFiltrados = videoJuegoService.findByFilters(nombre, fechaDePublicacion, descripcion, publico, tipo);
-		if(videojuegosFiltrados.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(videojuegosFiltrados, HttpStatus.OK);	
+				@RequestParam(required = false) @Parameter (description = "Nombre del videojuego") String nombre){
+		return videoJuegoService.findByFilters(nombre)
+				.map(videojuegos -> new ResponseEntity<>(videojuegos, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 }

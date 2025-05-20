@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Quantum_Zone_Backend.service.AdministradorService;
+import com.example.Quantum_Zone_Backend.service.JwtService;
 import com.example.Quantum_Zone_Backend.modelo.Administrador;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,11 +30,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Administrador", description = "Controlador de administradores")
 public class AdministradorController {
 
+	private final JwtService jwtService;
 	private final AdministradorService administradorService;
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public AdministradorController(AdministradorService administradorService, PasswordEncoder passwordEncoder) {
+	public AdministradorController(JwtService jetService, AdministradorService administradorService, PasswordEncoder passwordEncoder) {
+		this.jwtService = jetService;
 		this.passwordEncoder = passwordEncoder;
 		this.administradorService = administradorService;
 	}
@@ -50,6 +53,7 @@ public class AdministradorController {
 		if (administradorOptional.isPresent()) {
 			Administrador administrador = administradorOptional.get();
 			if (passwordEncoder.matches(loginRequest.getContraseña(), administrador.getContraseña())) {
+				String jwt = this.jwtService.generateToken(administrador);
 				return new ResponseEntity<>("Inicio de sesión exitoso", HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("Credenciales inválidas", HttpStatus.UNAUTHORIZED);
@@ -57,8 +61,7 @@ public class AdministradorController {
 		} else {
 			return new ResponseEntity<>("Administrador no encontrado", HttpStatus.NOT_FOUND);
 		}
-
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		
 	}
 
 	@GetMapping
@@ -66,7 +69,11 @@ public class AdministradorController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Lista de administradores obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
-	public ResponseEntity<List<Administrador>> getAllAdministradores() {
+	public ResponseEntity<?> getAllAdministradores(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null || !this.jwtService.validateJwtToken(token)) {
+			return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
+		}
 		List<Administrador> administradores = administradorService.findAll();
 		return new ResponseEntity<>(administradores, HttpStatus.OK);
 	}
@@ -75,14 +82,15 @@ public class AdministradorController {
 	@Operation(summary = "Obtener administrador por ID", description = "Devuelve un administrador específico basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador encontrado"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
-	public ResponseEntity<Administrador> getAdministradorById(
-			@PathVariable @Parameter(description = "ID del administrador") int id) {
-		Administrador administrador = administradorService.findById(id);
-		if (administrador != null) {
-			return new ResponseEntity<>(administrador, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getAdministradorById(
+			@PathVariable @Parameter(description = "ID del administrador") Integer id,@RequestHeader(value = "Authorization", required = false) String authHeader ) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null || !this.jwtService.validateJwtToken(token)) {
+			return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
 		}
+		return administradorService.findById(id)
+				.map(administrador -> new ResponseEntity<>(administrador, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	@PostMapping
@@ -99,16 +107,17 @@ public class AdministradorController {
 	@Operation(summary = "Actualizar un administrador", description = "Actualiza los datos de un administrador existente.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
-	public ResponseEntity<Administrador> updateAdministrador(
-			@PathVariable @Parameter(description = "ID del administrador") int id,
-			@RequestBody @Parameter(description = "Datos del administrador a actualizar") Administrador administrador) {
-		Administrador administradorActualizado = administradorService.update(administrador);
-		if (administradorActualizado != null) {
-			administrador.setId(id);
-			return new ResponseEntity<>(administradorActualizado, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> updateAdministrador(
+			@PathVariable @Parameter(description = "ID del administrador") Integer id,
+			@RequestBody @Parameter(description = "Datos del administrador a actualizar") Administrador administrador,
+			@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null || !this.jwtService.validateJwtToken(token)) {
+			return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
 		}
+		return administradorService.update(id, administrador)
+				.map(updatedAdministrador -> new ResponseEntity<>(updatedAdministrador, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	@DeleteMapping("/{id}")
@@ -116,9 +125,15 @@ public class AdministradorController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Administrador eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Administrador no encontrado") })
 	public ResponseEntity<Void> deleteAdministrador(
-			@PathVariable @Parameter(description = "ID del administrador") int id) {
-		administradorService.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			@PathVariable @Parameter(description = "ID del administrador") int id,
+			@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null || !this.jwtService.validateJwtToken(token)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		boolean isDeleted = administradorService.deleteById(id);
+		return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/filtros")
@@ -127,16 +142,11 @@ public class AdministradorController {
 			@ApiResponse(responseCode = "200", description = "Lista de administradores filtrada obtenida con éxito"),
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta") })
 	public ResponseEntity<List<Administrador>> getAdministradoresByFilters(
-			@RequestParam(required = false) @Parameter(description = "Nombre del administrador") String nombre,
-			@RequestParam(required = false) @Parameter(description = "Cédula del administrador") String cedula,
-			@RequestParam(defaultValue = "0") @Parameter(description = "Edad del administrador") int edad) {
-		List<Administrador> administradoresFiltrados = administradorService.findByFilters(nombre, cedula, edad);
+			@RequestParam(required = false) @Parameter(description = "Nombre del administrador") String nombre) {
+		return administradorService.findByFilters(nombre)
+				.map(administradores -> new ResponseEntity<>(administradores, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
-		// Verificar si la lista está vacía
-		if (administradoresFiltrados.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<>(administradoresFiltrados, HttpStatus.OK);
 	}
 	// Inner class for login request
     public static class LoginRequest {
