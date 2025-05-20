@@ -1,5 +1,4 @@
 package com.example.Quantum_Zone_Backend.controller;
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.Quantum_Zone_Backend.service.JwtService;
 import com.example.Quantum_Zone_Backend.service.ObjetoService;
 import com.example.Quantum_Zone_Backend.modelo.Objeto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,17 +27,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Objeto", description = "Controlador de objetos")
 public class ObjetoController {
 	private final ObjetoService objetoService;
+	private final JwtService jwtService;
 	
 	@Autowired
-	public ObjetoController(ObjetoService objetoService) {
+	public ObjetoController(ObjetoService objetoService, JwtService jwtService) {
 		this.objetoService = objetoService;
+		this.jwtService = jwtService;
 	}
 	
 	@GetMapping
 	@Operation(summary = "Obtener todos los objetos", description = "Devuelve una lista de todos los objetos registrados.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de objetos obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
-	public ResponseEntity<List<Objeto>> getAllObjetos() {
+	public ResponseEntity<List<Objeto>> getAllObjetos(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<>(objetoService.findAll(), HttpStatus.OK);
 	}
 	
@@ -46,7 +53,11 @@ public class ObjetoController {
 			@ApiResponse(responseCode = "200", description = "Objeto encontrado"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado")
 	})
-	public ResponseEntity<Objeto> getObjetoById(@PathVariable @Parameter(description = "ID del objeto") int id) {
+	public ResponseEntity<Objeto> getObjetoById(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return objetoService.findById(id)
 				.map(objeto -> new ResponseEntity<>(objeto, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -63,7 +74,12 @@ public class ObjetoController {
 	@Operation(summary = "Actualizar objeto", description = "Actualiza un objeto existente basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
-	public ResponseEntity<Objeto> updateObjeto(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestBody Objeto objeto) {
+	public ResponseEntity<Objeto> updateObjeto(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestBody Objeto objeto, 
+												@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return objetoService.findById(id)
 				.map(existingObjeto -> {
 					objeto.setId(id);
@@ -76,7 +92,11 @@ public class ObjetoController {
 	@Operation(summary = "Eliminar objeto", description = "Elimina un objeto existente basado en su ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Objeto eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "Objeto no encontrado") })
-	public ResponseEntity<Void> deleteObjeto(@PathVariable @Parameter(description = "ID del objeto") int id) {
+	public ResponseEntity<Void> deleteObjeto(@PathVariable @Parameter(description = "ID del objeto") int id, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		boolean objetoExists = objetoService.deleteById(id);
 		return objetoExists ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
@@ -86,8 +106,12 @@ public class ObjetoController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de objetos filtrados obtenida con éxito"),
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta") })
 	public ResponseEntity<List<Objeto>> getObjetosByFilters(
+			@RequestHeader(value = "Authorization", required = false) String authHeader,
 			@RequestParam(required = false) @Parameter(description = "nombre") String nombre) {
-		
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return objetoService.findByFilters(nombre)
 				.map(objetos -> new ResponseEntity<>(objetos, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
