@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Quantum_Zone_Backend.service.ClienteService;
+import com.example.Quantum_Zone_Backend.service.JwtService;
 import com.example.Quantum_Zone_Backend.modelo.Cliente;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,11 +32,12 @@ import jakarta.transaction.Transactional;
 public class ClienteController {
 	
 	private final ClienteService clienteService;
-	//private final JWTService jwtService;
+	private final JwtService jwtService;
 
 	@Autowired
-	public ClienteController(ClienteService clienteService) {
+	public ClienteController(ClienteService clienteService, JwtService jwtService) {
 		this.clienteService = clienteService;
+		this.jwtService = jwtService;
 	}
 
 	@GetMapping
@@ -42,7 +45,11 @@ public class ClienteController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Lista de clientes obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
 	
-	public ResponseEntity<List<Cliente>> getAllClientes() {
+	public ResponseEntity<List<Cliente>> getAllClientes(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if(token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<>(clienteService.findAll(), HttpStatus.OK);
 	}
 	
@@ -52,7 +59,12 @@ public class ClienteController {
             @ApiResponse(responseCode = "200", description = "cliente encontrado"),
             @ApiResponse(responseCode = "404", description = "cliente no encontrado")
     })
-    public ResponseEntity<Cliente> getClienteById(@PathVariable @Parameter(description = "ID del cliente") int id) {
+    public ResponseEntity<Cliente> getClienteById(@PathVariable @Parameter(description = "ID del cliente") int id,
+    											 @RequestHeader(value = "Authorization", required = false) String authHeader){
+		String token = this.jwtService.extractToken(authHeader);
+	    if(token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return clienteService.findById(id)
 				.map(cliente -> new ResponseEntity<>(cliente, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -65,7 +77,12 @@ public class ClienteController {
             @ApiResponse(responseCode = "201", description = "Cliente creado con éxito"),
             @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
-    public ResponseEntity<Cliente> createCliente(@RequestBody @Parameter(description = "Datos del cliente a crear") Cliente cliente) {
+    public ResponseEntity<Cliente> createCliente(@RequestBody @Parameter(description = "Datos del cliente a crear") Cliente cliente,
+    											@RequestHeader(value = "Authorization", required = false) String authHeader) {
+    	String token = this.jwtService.extractToken(authHeader);
+    	if(token == null) {
+					return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
     	Cliente nuevoCliente = clienteService.save(cliente);
 		return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
     }
@@ -77,7 +94,12 @@ public class ClienteController {
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
     public ResponseEntity<Cliente> updateCliente(@PathVariable @Parameter(description = "ID del cliente") int id,
-                                                 @RequestBody @Parameter(description = "Datos actualizados del cliente") Cliente cliente) {
+                                                 @RequestBody @Parameter(description = "Datos actualizados del cliente") Cliente cliente,
+                                                 @RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if(token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
         return clienteService.update(id, cliente)
 				.map(updatedCliente -> new ResponseEntity<>(updatedCliente, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -89,7 +111,12 @@ public class ClienteController {
             @ApiResponse(responseCode = "204", description = "Cliente eliminado con éxito"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
-    public ResponseEntity<Void> deleteCliente(@PathVariable @Parameter(description = "ID del cliente") int id) {
+    public ResponseEntity<Void> deleteCliente(@PathVariable @Parameter(description = "ID del cliente") int id,
+    										  @RequestHeader (value = "Authorization", required = false) String authHeader) {
+    	String token = this.jwtService.extractToken(authHeader);
+    	if(token == null) {
+    					return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    	}
     	boolean clienteEliminado = clienteService.deleteById(id);
     	return clienteEliminado ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -101,6 +128,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "400", description = "Parámetros inválidos")
     })
     public ResponseEntity<List<Cliente>> buscarUsuarios(
+    		@RequestHeader (value = "Authorization", required = false) String authHeader,
             @RequestParam(required = false) @Parameter(description = "Nombre del cliente") String nombre,
             @RequestParam(defaultValue = "0")@Parameter(description = "Edad del cliente") int edad,
             @RequestParam(required = false) @Parameter(description = "Dirección del cliente") String direccion,
@@ -109,6 +137,10 @@ public class ClienteController {
             @RequestParam(required = false) @Parameter(description = "Teléfono del cliente") String telefono,
             @RequestParam(required = false) @Parameter(description = "Fecha de registro del cliente") LocalDate fechaRegistro,
             @RequestParam(required = false) @Parameter(description = "Email del usuario") String email) {
+    	String token = this.jwtService.extractToken(authHeader);
+    	if(token == null) {
+    					return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    	}
 		return clienteService.findByFilters(cedula)
 				.map(clientes -> new ResponseEntity<>(clientes, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
