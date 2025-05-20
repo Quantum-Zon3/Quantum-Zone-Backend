@@ -1,8 +1,6 @@
 package com.example.Quantum_Zone_Backend.controller;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +22,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.example.Quantum_Zone_Backend.modelo.Cliente;
-import com.example.Quantum_Zone_Backend.modelo.VideoJuego;
 import com.example.Quantum_Zone_Backend.modelo.VideojuegoRentado;
+import com.example.Quantum_Zone_Backend.service.JwtService;
 import com.example.Quantum_Zone_Backend.service.VideojuegoRentadoService;
 
 @RestController
@@ -34,10 +31,12 @@ import com.example.Quantum_Zone_Backend.service.VideojuegoRentadoService;
 @Tag(name = "Videojuegos Rentados", description = "API para la gestion de videojuegos rentados")
 public class VideojuegoRentadoController {
 	private VideojuegoRentadoService videojuegoRentadoService;
+	private JwtService jwtService;
 	
 	@Autowired
-	public VideojuegoRentadoController(VideojuegoRentadoService videojuegoRentadoService) {
+	public VideojuegoRentadoController(VideojuegoRentadoService videojuegoRentadoService, JwtService jwtService) {
 		this.videojuegoRentadoService = videojuegoRentadoService;
+		this.jwtService = jwtService;
 	}
 	
 	// Obtener todos los videojuegos rentados
@@ -47,7 +46,11 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "Lista de videojuegos rentados obtenida con éxito"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor")
 	})
-	public ResponseEntity<List<VideojuegoRentado>> getAllVideojuegosRentados() {
+	public ResponseEntity<List<VideojuegoRentado>> getAllVideojuegosRentados(@RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<>(videojuegoRentadoService.findAll(), HttpStatus.OK);
 	}
 	
@@ -58,7 +61,12 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado encontrado"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<VideojuegoRentado> getVideojuegoRentadoById(@PathVariable @Parameter(description = "ID del videojuego rentado") int id) {
+	public ResponseEntity<VideojuegoRentado> getVideojuegoRentadoById(@PathVariable @Parameter(description = "ID del videojuego rentado") int id,
+																	  @RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return videojuegoRentadoService.findById(id)
 				.map(videojuegoRentado -> new ResponseEntity<>(videojuegoRentado, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -70,7 +78,12 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "201", description = "videojuego rentado creado con éxito"),
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
-	public ResponseEntity<VideojuegoRentado> createVideojuegoRentado(@RequestBody VideojuegoRentado videojuegoRentado) {
+	public ResponseEntity<VideojuegoRentado> createVideojuegoRentado(@RequestBody VideojuegoRentado videojuegoRentado,
+																	@RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		VideojuegoRentado videojuegoR = videojuegoRentadoService.save(videojuegoRentado);
 		return new ResponseEntity<>(videojuegoR, HttpStatus.CREATED);
 	
@@ -82,7 +95,12 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado actualizado con éxito"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<VideojuegoRentado> updateVideojuegoRentado(@PathVariable int id, @RequestBody VideojuegoRentado videojuegoRentado) {
+	public ResponseEntity<VideojuegoRentado> updateVideojuegoRentado(@PathVariable int id, @RequestBody VideojuegoRentado videojuegoRentado,
+																	@RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return videojuegoRentadoService.findById(id)
 				.map(existingVideojuegoRentado -> {
 					videojuegoRentado.setId(id);
@@ -99,7 +117,11 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "200", description = "videojuego rentado eliminado con éxito"),
 			@ApiResponse(responseCode = "404", description = "videojuego rentado no encontrado")
 	})
-	public ResponseEntity<Void> deleteVideojuegoRentado(@PathVariable int id) {
+	public ResponseEntity<Void> deleteVideojuegoRentado(@PathVariable int id, @RequestHeader (value = "Authorization", required = false) String authHeader) {
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		boolean videojuegoRentadoEliminado = videojuegoRentadoService.deleteById(id);
 		return videojuegoRentadoEliminado ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
@@ -112,8 +134,13 @@ public class VideojuegoRentadoController {
 			@ApiResponse(responseCode = "400", description = "Solicitud incorrecta")
 	})
 	public ResponseEntity<List<VideojuegoRentado>> filterVideojuegosRentados(
-			@RequestParam(defaultValue = "0")@Parameter(required = false) int idVideojuego)
+			@RequestParam(defaultValue = "0")@Parameter(required = false) int idVideojuego,
+			@RequestHeader (value = "Authorization", required = false) String authHeader)
 			{
+		String token = this.jwtService.extractToken(authHeader);
+		if (token == null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		return videojuegoRentadoService.findByFilters(idVideojuego)
 				.map(videojuegos -> new ResponseEntity<>(videojuegos, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
