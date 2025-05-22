@@ -23,11 +23,11 @@ public class VideojuegosRentadosRepository {
 		return videojuegoRentado;
 	}
 	public List<VideojuegoRentado> findAll() {
-		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado", VideojuegoRentado.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM videojuegos_rentados", VideojuegoRentado.class);
 		return query.getResultList();
 	}
 	public Optional<VideojuegoRentado> findById(Integer id) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE id = :id", VideojuegoRentado.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM videojuegos_rentados WHERE id = :id", VideojuegoRentado.class);
 		query.setParameter("id", id);
 		try {
 			VideojuegoRentado videojuegoRentado = (VideojuegoRentado) query.getSingleResult();
@@ -37,13 +37,13 @@ public class VideojuegosRentadosRepository {
 		}
 	}
 	public boolean deleteById(Integer id) {
-		Query query = entityManager.createNativeQuery("DELETE FROM VideojuegoRentado WHERE id = :id");
+		Query query = entityManager.createNativeQuery("DELETE FROM videojuegos_rentados WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
 	}
 	public Optional<VideojuegoRentado> update(Integer id,VideojuegoRentado videojuegoRentado) {
-		Query query = entityManager.createNativeQuery("UPDATE VideojuegoRentado SET idCliente = :idCliente, idVideojuego = :idVvideojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
+		Query query = entityManager.createNativeQuery("UPDATE videojuegos_rentados SET idCliente = :idCliente, idVideojuego = :idVvideojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
 		query.setParameter("idCliente", videojuegoRentado.getIdCliente());
 		query.setParameter("idVideojuego", videojuegoRentado.getIdVideojuego());
 		query.setParameter("fechaAlquiler", videojuegoRentado.getFechaAlquiler());
@@ -57,7 +57,7 @@ public class VideojuegosRentadosRepository {
 		}
 	}
 	public Optional<List<VideojuegoRentado>> findByFilters(Integer idVideojuego) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM VideojuegoRentado WHERE idVideojuego = :idVideojuego", VideojuegoRentado.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM videojuegos_rentados WHERE idVideojuego = :idVideojuego", VideojuegoRentado.class);
 		query.setParameter("idVideojuego", idVideojuego);
 		try {
 			List<VideojuegoRentado> videojuegoRentado = query.getResultList();

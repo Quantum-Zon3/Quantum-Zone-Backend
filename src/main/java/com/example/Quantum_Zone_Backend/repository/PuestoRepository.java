@@ -21,13 +21,13 @@ public class PuestoRepository {
 	//Buscar todos los puestos
 	@Transactional
 	public List<Puesto> findAll() {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto ", Puesto.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM puestos ", Puesto.class);
 		return query.getResultList();
 	}
 	//Buscar puesto por id
 	@Transactional
 	public Optional<Puesto> findById(Integer id) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE id = :id", Puesto.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM puestos WHERE id = :id", Puesto.class);
 		query.setParameter("id", id);
 		try {
 			Puesto puesto = (Puesto) query.getSingleResult();
@@ -39,7 +39,7 @@ public class PuestoRepository {
 	//Eliminar puesto por id
 	@Transactional
 	public boolean deleteById(Integer id) {
-		Query query = entityManager.createNativeQuery("DELETE FROM Puesto WHERE id = :id");
+		Query query = entityManager.createNativeQuery("DELETE FROM puestos WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
@@ -47,7 +47,7 @@ public class PuestoRepository {
 	//Actualizar puesto
 	@Transactional
 	public Optional<Puesto> update(Integer id, Puesto puesto) {
-		Query query = entityManager.createNativeQuery("UPDATE Puesto SET numeroDePuesto = :numeroDePuesto, idConsola = :idConsola, cantidadDeSillas = :cantidadDeSillas, canditadDeControles = :canditadDeControles WHERE id = :id");
+		Query query = entityManager.createNativeQuery("UPDATE puestos SET numeroDePuesto = :numeroDePuesto, idConsola = :idConsola, cantidadDeSillas = :cantidadDeSillas, canditadDeControles = :canditadDeControles WHERE id = :id");
 		query.setParameter("numeroDePuesto", puesto.getNumeroDePuesto());
 		query.setParameter("idConsola", puesto.getIdConsola());
 		query.setParameter("cantidadDeSillas", puesto.getCantidadDeSillas());
@@ -62,7 +62,7 @@ public class PuestoRepository {
 	}
 	//Buscar puesto por filtros
 	public Optional<List<Puesto>> findByFilters(String numeroDePuesto) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Puesto WHERE numeroDePuesto LIKE :numeroDePuesto", Puesto.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM puestos WHERE numeroDePuesto LIKE :numeroDePuesto", Puesto.class);
 		query.setParameter("numeroDePuesto", numeroDePuesto);
 		try {
 			List<Puesto> puestos = query.getResultList();

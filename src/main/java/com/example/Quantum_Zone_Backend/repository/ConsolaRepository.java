@@ -22,13 +22,13 @@ public class ConsolaRepository {
 	 //Buscar consola
 	 @Transactional
 	 public List<Consola> findAll() { 
-		 Query query = entityManager.createNativeQuery("SELECT * FROM Consola ", Consola.class);
+		 Query query = entityManager.createNativeQuery("SELECT * FROM consolas ", Consola.class);
 		 return query.getResultList();
 	 }
 	 //Buscar consola por id
 	 @Transactional
 	 public Optional<Consola> findById(Integer id) {
-		 Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE id = :id", Consola.class);
+		 Query query = entityManager.createNativeQuery("SELECT * FROM consolas WHERE id = :id", Consola.class);
 		 query.setParameter("id", id);
 		 try {
 			 Consola consola = (Consola) query.getSingleResult();
@@ -40,7 +40,7 @@ public class ConsolaRepository {
 	 //Eliminar consola por id
 	 @Transactional
 	 public boolean deleteById(Integer id) {
-		 Query query = entityManager.createNativeQuery("DELETE FROM Consola WHERE id = :id");
+		 Query query = entityManager.createNativeQuery("DELETE FROM consolas WHERE id = :id");
 		 query.setParameter("id", id);
 		 int delete = query.executeUpdate();
 		 return delete > 0;
@@ -48,7 +48,7 @@ public class ConsolaRepository {
 	 //Actualizar consola
 	 @Transactional
 	 public Optional<Consola> update(Integer id,Consola consola) {
-	    Query query = entityManager.createNativeQuery("UPDATE Consola SET marca = :marca, consola = :consola, fechaDePublicacion = :fechaDePublicacion WHERE id = :id");
+	    Query query = entityManager.createNativeQuery("UPDATE consolas SET marca = :marca, consola = :consola, fechaDePublicacion = :fechaDePublicacion WHERE id = :id");
 	    query.setParameter("marca", consola.getMarca());
 	    query.setParameter("consola", consola.getConsola());
 	    query.setParameter("fechaDePublicacion", consola.getFechaDePublicacion());
@@ -62,7 +62,7 @@ public class ConsolaRepository {
 	    }
 	 //Buscar consola por filtros
 	 public Optional<List<Consola>> findByFilters(String consola) {
-	    Query query = entityManager.createNativeQuery("SELECT * FROM Consola WHERE consola LIKE :consola", Consola.class);
+	    Query query = entityManager.createNativeQuery("SELECT * FROM consolas WHERE consola LIKE :consola", Consola.class);
 	    query.setParameter("consola", consola);
 	    try {
 	        List<Consola> consolas = query.getResultList();

@@ -22,13 +22,13 @@ public class AdministradorRepository {
 	//Buscar todos los Administradores
 	@Transactional
 	public List<Administrador> findAll() {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Administrador ", Administrador.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM administradores ", Administrador.class);
 		return query.getResultList();
 	}
 	//Buscar administrador por id
 	@Transactional
 	public Optional <Administrador> findById(Integer id) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Administrador WHERE id = :id", Administrador.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM administradores WHERE id = :id", Administrador.class);
 		query.setParameter("id", id);
 		try {
 			Administrador administrador = (Administrador) query.getSingleResult();
@@ -40,7 +40,7 @@ public class AdministradorRepository {
 	//Eliminar administrador por id
 	@Transactional
 	public boolean deleteById(Integer id) {
-		Query query = entityManager.createNativeQuery("DELETE FROM Administrador WHERE id = :id");
+		Query query = entityManager.createNativeQuery("DELETE FROM administradores WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
@@ -48,7 +48,7 @@ public class AdministradorRepository {
 	//Actualizar administrador
 	@Transactional
 	public Optional<Administrador> update(Integer id,Administrador administrador) {
-		Query query = entityManager.createNativeQuery("UPDATE Administrador SET nombre = :nombre, contraseña = :contraseña, edad = :edad, cedula = :cedula WHERE id = :id");
+		Query query = entityManager.createNativeQuery("UPDATE administradores SET nombre = :nombre, contraseña = :contraseña, edad = :edad, cedula = :cedula WHERE id = :id");
 		query.setParameter("nombre", administrador.getNombre());
 		query.setParameter("contraseña", administrador.getContraseña());
 		query.setParameter("edad", administrador.getEdad());
@@ -63,7 +63,7 @@ public class AdministradorRepository {
 	}
 	//Buscar administrador por filtros
 	public Optional<List<Administrador>> findByFilters(String nombre) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Administrador WHERE nombre LIKE :nombre", Administrador.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM administradores WHERE nombre LIKE :nombre", Administrador.class);
 		query.setParameter("nombre",  nombre );
 		try {
 			List<Administrador> administradores = query.getResultList();
