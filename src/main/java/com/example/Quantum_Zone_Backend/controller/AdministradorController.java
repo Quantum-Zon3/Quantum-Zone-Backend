@@ -152,6 +152,11 @@ public class AdministradorController {
     public static class LoginRequest {
         private String cedula;
         private String contraseña;
+        
+        public LoginRequest(String cedula, String contraseña) {
+			this.cedula = cedula;
+			this.contraseña = contraseña;
+		}
 
         public String getCedula() {
             return cedula;
