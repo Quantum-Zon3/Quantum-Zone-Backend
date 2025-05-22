@@ -54,7 +54,7 @@ public class AdministradorController {
 			Administrador administrador = administradorOptional.get();
 			if (passwordEncoder.matches(loginRequest.getContraseña(), administrador.getContraseña())) {
 				String jwt = this.jwtService.generateToken(administrador);
-				return new ResponseEntity<>("Inicio de sesión exitoso", HttpStatus.OK);
+				return ResponseEntity.ok(new LoginResponse(jwt, administrador.getCedula(), administrador.getNombre()));
 			} else {
 				return new ResponseEntity<>("Credenciales inválidas", HttpStatus.UNAUTHORIZED);
 			}
@@ -172,6 +172,41 @@ public class AdministradorController {
 
         public void setContraseña(String contraseña) {
             this.contraseña = contraseña;
+        }
+    }
+    
+    public static class LoginResponse {
+        private String token;
+        private String cedula;
+        private String nombre;
+        public LoginResponse(String token, String cedula, String nombre) {
+            this.token = token;
+            this.cedula = cedula;
+            this.nombre = nombre;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getCedula() {
+            return cedula;
+        }
+
+        public void setCedula(String cedula) {
+            this.cedula = cedula;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
         }
     }
 
