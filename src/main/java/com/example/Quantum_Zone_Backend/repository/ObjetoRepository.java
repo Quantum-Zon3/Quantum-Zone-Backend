@@ -20,12 +20,12 @@ public class ObjetoRepository {
 	}
 	//Buscar todos los objetos
 	public List<Objeto> findAll() {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Objeto ", Objeto.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM objetos ", Objeto.class);
 		return query.getResultList();
 	}
 	//Buscar objeto por id
 	public Optional<Objeto> findById(Integer id) {
-		Query query = entityManager.createNativeQuery("SELECT * FROM Objeto WHERE id = :id", Objeto.class);
+		Query query = entityManager.createNativeQuery("SELECT * FROM objetos WHERE id = :id", Objeto.class);
 		query.setParameter("id", id);
 		try {
 			Objeto objeto = (Objeto) query.getSingleResult();
@@ -37,7 +37,7 @@ public class ObjetoRepository {
 	//Eliminar objeto por id
 	@Transactional
 	public boolean deleteById(Integer id) {
-		Query query = entityManager.createNativeQuery("DELETE FROM Objeto WHERE id = :id");
+		Query query = entityManager.createNativeQuery("DELETE FROM objetos WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
@@ -45,7 +45,7 @@ public class ObjetoRepository {
 	//Actualizar objeto
 	@Transactional
 	public Optional<Objeto> update(Integer id, Objeto objeto) {
-		Query query = entityManager.createNativeQuery("UPDATE Objeto SET nombre = :nombre, descripcion = :descripcion, fecha = :fecha, estado = :estado, categoria = :categoria WHERE id = :id");
+		Query query = entityManager.createNativeQuery("UPDATE objetos SET nombre = :nombre, descripcion = :descripcion, fecha = :fecha, estado = :estado, categoria = :categoria WHERE id = :id");
 		query.setParameter("nombre", objeto.getNombre());
 		query.setParameter("descripcion", objeto.getDescripcion());
 		query.setParameter("fecha", objeto.getFecha());
@@ -61,7 +61,7 @@ public class ObjetoRepository {
 	}
 	//Buscar objeto por filtros
 	public Optional<List<Objeto>> findByFilters(String nombre) {
-	    Query query = entityManager.createNativeQuery("SELECT * FROM Objeto WHERE nombre LIKE :nombre", Objeto.class);
+	    Query query = entityManager.createNativeQuery("SELECT * FROM objetos WHERE nombre LIKE :nombre", Objeto.class);
 	    query.setParameter("nombre",nombre);
 	    try {
 	        List<Objeto> objetos = query.getResultList();
