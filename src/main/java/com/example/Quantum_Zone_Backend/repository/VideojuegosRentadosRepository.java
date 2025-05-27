@@ -22,10 +22,12 @@ public class VideojuegosRentadosRepository {
 		entityManager.persist(videojuegoRentado);
 		return videojuegoRentado;
 	}
+	@Transactional
 	public List<VideojuegoRentado> findAll() {
 		Query query = entityManager.createNativeQuery("SELECT * FROM videojuegos_rentados", VideojuegoRentado.class);
 		return query.getResultList();
 	}
+	@Transactional
 	public Optional<VideojuegoRentado> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM videojuegos_rentados WHERE id = :id", VideojuegoRentado.class);
 		query.setParameter("id", id);
@@ -36,12 +38,14 @@ public class VideojuegosRentadosRepository {
 			return Optional.empty();
 		}
 	}
+	@Transactional
 	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM videojuegos_rentados WHERE id = :id");
 		query.setParameter("id", id);
 		int delete = query.executeUpdate();
 		return delete > 0;
 	}
+	@Transactional
 	public Optional<VideojuegoRentado> update(Integer id,VideojuegoRentado videojuegoRentado) {
 		Query query = entityManager.createNativeQuery("UPDATE videojuegos_rentados SET idCliente = :idCliente, idVideojuego = :idVvideojuego, fechaAlquiler = :fechaAlquiler, fechaDevolucion = :fechaDevolucion WHERE id = :id");
 		query.setParameter("idCliente", videojuegoRentado.getIdCliente());
