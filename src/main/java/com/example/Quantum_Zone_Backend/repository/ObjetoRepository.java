@@ -19,11 +19,13 @@ public class ObjetoRepository {
 		return objeto;
 	}
 	//Buscar todos los objetos
+	@Transactional
 	public List<Objeto> findAll() {
 		Query query = entityManager.createNativeQuery("SELECT * FROM objetos ", Objeto.class);
 		return query.getResultList();
 	}
 	//Buscar objeto por id
+	@Transactional
 	public Optional<Objeto> findById(Integer id) {
 		Query query = entityManager.createNativeQuery("SELECT * FROM objetos WHERE id = :id", Objeto.class);
 		query.setParameter("id", id);

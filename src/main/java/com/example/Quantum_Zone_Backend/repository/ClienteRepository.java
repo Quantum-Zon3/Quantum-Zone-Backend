@@ -37,6 +37,7 @@ public class ClienteRepository {
 		}
 	}
 	//Eliminar cliente por id
+	@Transactional
 	public boolean deleteById(Integer id) {
 		Query query = entityManager.createNativeQuery("DELETE FROM clientes WHERE id = :id");
 		query.setParameter("id", id);
